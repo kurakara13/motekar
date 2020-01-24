@@ -36,7 +36,14 @@
             <li class=""><a href="{{route('home')}}"><i class="fa fa-home"></i><span>Home</span></a></li>
             <li class=""><a href="#"><i class="fa fa-lightbulb-o"></i><span>Knowledge Pool</span></a></li>
             <li class=""><a href="#"><i class="fa fa-gears"></i><span>Project Pool</span></a></li>
-            <li class=""><a href="#"><i class="fa fa-fire"></i><span>Problem Pool</span></a></li>
+            <li class="{{ Request::segment(1) === 'problem' ? 'active open' : null }}">
+                <a href="#Project" class="has-arrow"><i class="fa fa-fire"></i><span>Problem</span></a>
+                <ul>
+                    <li class="{{ Request::segment(2) === 'newproblem' ? 'active' : null }}"><a href="{{route('problem.newproblem')}}">Submit New Problem</a></li>
+                    <li class="{{ Request::segment(2) === 'myproblemlist' ? 'active' : null }}"><a href="{{route('problem.myproblemlist')}}">My Problem List</a></li>
+                    <li class="{{ Request::segment(2) === 'problempool' ? 'active' : null }}"><a href="{{route('problem.problempool')}}">Problem Pool</a></li>
+                </ul>
+            </li>
             <li class=""><a href="#"><i class="fa fa-smile-o"></i><span>The Innovators</span></a></li>
             <li class=""><a href="#"><i class="fa fa-book"></i><span>Contact</span></a></li>
         </nav>

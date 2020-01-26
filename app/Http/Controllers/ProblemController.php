@@ -66,7 +66,7 @@ class ProblemController extends BaseController
         $problem->unit_id = $request->unit_id;
         $problem->problem =  "Bagaimana $request->bagaimana dari $request->dari menjadi $request->menjadi di $request->di dalam waktu $request->periode?";
         $problem->background =  $request->background;
-        $problem->asal_masalah =  implode(',',$request->food);
+        $problem->asal_masalah =  implode(',',$request->asal_masalah);
         $problem->status = '1';
         $problem->save();
         // alihkan halaman ke halaman index

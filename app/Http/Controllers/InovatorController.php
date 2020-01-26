@@ -13,12 +13,12 @@ use App\Unit;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\Notification;
 
-class ProblemController extends BaseController
+class InovatorController extends BaseController
 {
-    function newproblem(){
-      $unit = Unit::get();
+    function index(){
+      $inovator = User::withCount('problem')->get();
 
-      return view('problem.newproblem', compact('unit'));
+      return view('inovator.index', compact('inovator'));
     }
 
     function myproblemlist(){
@@ -100,6 +100,7 @@ class ProblemController extends BaseController
         $problem->problem = $request->problem;
         $problem->asal_masalah = $request->asal_masalah;
         $problem->background = $request->background;
+        $problem->tags = $request->tags;
         $problem->save();
 
         // alihkan halaman ke halaman problem detail

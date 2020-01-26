@@ -11,9 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
+Route::post('/admin/login', 'Auth\AdminLoginController@login');
 
 Auth::routes(['register' => false]);
 
@@ -32,4 +31,15 @@ Route::group(['middleware'=>['auth']], function () {
   Route::get('problem/deleteproblem/{problem_id}',        'ProblemController@deleteproblem')->name('problem.deleteproblem');
   Route::get('problem/editproblem/{problem_id}',          'ProblemController@editproblem')->name('editproblem');
   Route::post('problem/editproblemaction',                'ProblemController@editproblemaction')->middleware('auth');
+
+  //
+  Route::get('inovator/list',                'InovatorController@index')->name('inovator.list');
+});
+
+Route::group(['middleware'=>['auth:admin'], 'prefix' => 'admin'], function () {
+  Route::get('/', 'Admin\HomeController@index')->name('admin.home');
+  Route::get('/inovator/list',                'Admin\InovatorController@index')->name('admin.inovator.list');
+  Route::post('/inovator/list',                'Admin\InovatorController@store');
+  Route::get('/unit/list',                'Admin\UnitController@index')->name('admin.unit.list');
+  Route::post('/unit/list',                'Admin\UnitController@store');
 });

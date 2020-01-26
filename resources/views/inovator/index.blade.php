@@ -26,49 +26,28 @@
                   <table class="table table-hover js-basic-example dataTable table-custom spacing5 mb-0">
                       <thead>
                           <tr>
-                              <th class="text-center">Problem</th>
-                              <th class="text-center">Submitted By</th>
+                              <th class="text-center">NIK</th>
+                              <th class="text-center">Name</th>
+                              <th class="text-center">Position</th>
                               <th class="text-center">Unit</th>
-                              <th class="text-center">Submission Date</th>
-                              <th class="text-center">Interested by</th>
-                              <th class="text-center">Status</th>
-                              <th class="text-center">Action</th>
+                              <th class="text-center">Problem(s) Involved</th>
+                              <th class="text-center">Project(s) Involved</th>
                           </tr>
                       </thead>
                       <tbody>
-                      @foreach($problem_pool as $pp)
+                      @foreach($inovator as $pp)
                       <?php
                       $user = App\User::find($pp->user_id);
                        ?>
                           <tr>
                               <td class="text-justify" style="white-space:normal;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word">
-                                <p>{{ $pp->problem }}</p>
+                                <p>{{ $pp->username }}</p>
                               </td>
-                              <td class="text-center">{{$pp->user->name}}</td>
-                              <td class="text-center">{{$pp->units->unit_name}}</td>
-                              <td class="text-center">{{$pp->created_at}}</td>
-                              <td class="text-center">{{$pp->interests->count()}}</td>
-                              <!-- status -->
-                              @if($pp->status == '1')
-                              <td class="text-center"><span class="badge badge-danger text-uppercase">Need Team Project</span></td>
-                              @elseif($pp->status == '2')
-                              <td class="text-center"><span class="badge badge-warning text-uppercase">On Development</span></td>
-                              @elseif($pp->status == '0')
-                              <td class="text-center"><span class="badge badge-success text-uppercase">Solved</span></td>
-                              @endif
-                              <!-- action -->
-                              <td class="text-center">
-                              <a href="{{ route('problem.problemdetail' , $pp->problem_id)}}" class="btn btn-outline-primary fa fa-search"> See Detail </a>
-                              @if($pp->user_id != Auth::user()->id)
-                                @if($pp->interests)
-                                  @if(!in_array(Auth::user()->id, $pp->interests->pluck('user_id')->toArray()))
-                                  <a href="#" onclick="$('#form-method-join').attr('action', '{{url('problem/problempool/interest/'.$pp->problem_id)}}')" class="btn btn-outline-danger fa fa-users" data-toggle="modal" data-target=".launch-pricing-modal"> Join </a>
-                                  @endif
-                                @else
-                                <a href="#" onclick="$('#form-method-join').attr('action', '{{url('problem/problempool/interest/'.$pp->problem_id)}}')" class="btn btn-outline-danger fa fa-users" data-toggle="modal" data-target=".launch-pricing-modal"> Join </a>
-                                @endif
-                              @endif
-                            </td>
+                              <td class="text-center">{{$pp->name}}</td>
+                              <td class="text-center">{{$pp->posisi}}</td>
+                              <td class="text-center">{{$pp->unit}}</td>
+                              <td class="text-center">{{$pp->problem_count}}</td>
+                              <td class="text-center">0</td>
                           </tr>
                       @endforeach
                       </tbody>

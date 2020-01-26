@@ -9,7 +9,17 @@
         <div class="navbar-right">
             <div id="navbar-menu">
                 <ul class="nav navbar-nav">
-                    <li><a href="" class="icon-menu"><i class="icon-power"></i></a></li>
+                    <li>
+                      <a class="icon-menu" href="{{ route('logout') }}"
+                         onclick="event.preventDefault();
+                                       document.getElementById('logout-form').submit();">
+                          <i class="icon-power"></i>
+                      </a>
+
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                          @csrf
+                      </form>
+                    </li>
                 </ul>
             </div>
         </div>

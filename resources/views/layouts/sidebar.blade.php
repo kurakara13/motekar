@@ -34,8 +34,6 @@
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul id="main-menu" class="metismenu">
             <li class=""><a href="{{route('home')}}"><i class="fa fa-home"></i><span>Home</span></a></li>
-            <li class=""><a href="#"><i class="fa fa-lightbulb-o"></i><span>Knowledge Pool</span></a></li>
-            <li class=""><a href="#"><i class="fa fa-gears"></i><span>Project Pool</span></a></li>
             <li class="{{ Request::segment(1) === 'problem' ? 'active open' : null }}">
                 <a href="#Project" class="has-arrow"><i class="fa fa-fire"></i><span>Problem</span></a>
                 <ul>
@@ -44,6 +42,13 @@
                     <li class="{{ Request::segment(2) === 'problempool' ? 'active' : null }}"><a href="{{route('problem.problempool')}}">Problem Pool</a></li>
                 </ul>
             </li>
+            <li class="{{ Request::segment(1) === 'project' ? 'active open' : null }}">
+              <a href="#" class="has-arrow"><i class="fa fa-gears"></i><span>Project</span></a>
+              <ul>
+                  <li class="{{ Request::segment(2) === 'myproject' ? 'active' : null }}"><a href="{{route('project.myproject')}}">My Project</a></li>
+              </ul>
+            </li>
+            <li class="{{ Request::segment(1) === 'knowledge' ? 'active open' : null }}"><a href="{{route('knowledge')}}"><i class="fa fa-lightbulb-o"></i><span>Knowledge Pool</span></a></li>
             <li class=""><a href="#"><i class="fa fa-smile-o"></i><span>The Innovators</span></a></li>
             <li class=""><a href="#"><i class="fa fa-book"></i><span>Contact</span></a></li>
         </nav>

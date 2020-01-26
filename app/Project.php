@@ -46,6 +46,10 @@ class Project extends Model
   {
     return $this->hasOne('App\DasarImplementasi','project_id');
   }
+  public function sosialisasi()
+  {
+    return $this->hasOne('App\Sosialisasi','project_id');
+  }
   public function impact()
   {
     return $this->hasMany('App\Impact','project_id');

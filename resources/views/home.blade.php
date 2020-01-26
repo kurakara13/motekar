@@ -22,168 +22,89 @@
     </div>
     <div id="app">
       <div class="row clearfix">
-        <div class="col-lg-12 col-md-12">
+        <div class="col-lg-8 col-md-12">
           <div class="x_content bs-example-popovers">
             <div class="slider-item alert-success" >
               <div class="row slider-text align-items-center justify-content-center">
                 <div class="col-md-12 ftco-animate text-center">
                   <br>
                   <br>
-                  <h3>
+                  <h4>
                     <span class="fa fa-quote-left"></span>
                     Teruslah kreatif dan berinovasi! Itulah budaya Motekar!
                     <span class="fa fa-quote-right"></span>
-                    </h3>
+                  </h4>
                     <h3>- Mohammad Syibli [GM Telkom Bogor]</h3>
                   <br>
                   <br>
+                  <br><br>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-lg-12 col-md-12">
-            <div class="card">
+          @foreach($project as $item)
+            <div class="card mt-3">
+
                   <div class="body">
-                    <h2>Sneak Peek</h2>
-                    <hr>
-                      <blockquote class="blockquote mb-0">
-                          <p>
-                            <strong class="green">Motekar</strong> adalah <i>Knowledge Management System</i> Telkom Bogor yang dimulai sejak 2019.
-                          <strong class="green">Motekar</strong> menjadi wadah bagi karyawan untuk menyampaikan pengetahuan <i>best practice</i> yang telah diterapkan di unit kerjanya, sehingga dapat ditiru oleh unit kerja lain sesuai kebutuhan.
-                            Dengan begitu, cara-cara baru yang sebelumnya diterapkan dalam skala kecil dapat diadopsi ke skala yang lebih besar dengan harapan meningkatkan efektifitas kerja perusahaan.
-                          </p>
-                      </blockquote>
-                      <br>
-                      <blockquote class="blockquote mb-0">
-                          <p>
-                            Selain itu, <strong class="green">Motekar</strong> juga memberi ruang kepada karyawan untuk menyuarakan masalah yang ditemukan di unit kerjanya.
-                            Masalah-masalah tersebut kemudian diselesaikan bersama-sama melalui sebuah tim project melalui tahapan <strong class="green">design thinking</strong> yaitu,
-                            <i class="green">find problem, brainstorming, gathering idea, proposal, project development, pilot project, dan implementation.</i>
-                          </p>
-                      </blockquote>
+                    <h5 class="card-title">{{$item->sosialisasi->judul}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{$item->sosialisasi->created_at}}</h6>
+                    <div class="mb-3">
+                      <p>{{$item->sosialisasi->post}}</p>
+                      @foreach($item->sosialisasi->image as $image)
+
+                        <img src="{{asset('file/doc/'.$image->image)}}" style="width:100px" alt="">
+                      @endforeach
+                    </div>
+
+
+
+                    <div class="card-footer" style="background:#fff; border-color:#e1e8ed" >
+                      <div class="row clearfix">
+                        <div class="col-md-6">
+                          <a href="#">Like</a>
+                        </div>
+                        <div class="col-md-6">
+                          <a href="#">Comment</a>
+
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                </div>
+          @endforeach
+        </div>
+        <div class="col-lg-4 col-md-12">
+          <div class="card">
+            <div class="body">
+              <img src="{{asset('image/kipas-sakti.png')}}" class="card-img-top" alt="">
+            </div>
+          </div>
+          <div class="card">
+            <div class="body">
+              <div class="d-flex align-items-center">
+                    <div class="ml-4">
+                        <span>Problem</span>
+                        <h4 class="mb-0 font-weight-medium">{{count($problem)}}</h4>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="body">
+              <div class="d-flex align-items-center">
+                    <div class="ml-4">
+                        <span>Project</span>
+                        <h4 class="mb-0 font-weight-medium">{{count($project)}}</h4>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
+
       </div>
-      <div class="row clearfix">
-        <div class="col-lg-12 col-md-3">
-            <div class="card text-white bg-green">
-                <div class="card-header">Sejak Motekar dimulai..</div>
-                <div class="card-body">
-                  <div class="row clearfix">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="body w_summary">
-                                <div class="s_detail">
-                                    <h4 class="mb-0"><i class="fa fa-exclamation green"></i> 14 <span>Masalah</span></h4>
-                                    <span>telah disuarakan</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="body w_summary">
-                                <div class="s_detail">
-                                  <h4 class="mb-0"><i class="fa fa-lightbulb-o green"></i> 3 <span>Inovasi</span></h4>
-                                  <span>berhasil diciptakan</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="body w_summary">
-                              <div class="s_detail">
-                                <h4 class="mb-0"><i class="fa fa-gears green"></i> 2 <span>Ide</span></h4>
-                                <span>sedang dikembangkan</span>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="body w_summary">
-                              <div class="s_detail">
-                                <h4 class="mb-0"><i class="fa fa-smile-o green"></i> 28 <span>Karyawan</span></h4>
-                                <span>terlibat secara aktif</span>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </div>
+
     </div>
-      <div class="row clearfix">
-        <div class="col-lg-12">
-                <div class="card bg-green">
-                    <div class="body">
-                    <h4 class="text-center text-success">Design Thinking, Innovation Starts Here!</h4>
-                    <p class="text-center">Penyelesaian masalah-masalah di Motekar dikerjakan dengan suatu kerangka <i>Design Thinking</i> sebagai berikut.</p>
-                    <br>
-                        <ul class="timeline timeline-centered">
-                            <li class="timeline-item">
-                                <div class="timeline-info">
-                                <h5><a href="#" class="btn btn-outline-danger"><i class="fa fa-exclamation-circle"></i> Find Problem</a></h5>
-                                </div>
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p>Masalah harus dirumuskan menggunakan kaidah SMART (Specific, Measureable, Achievable, Realistic, and Timely)</p>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-info">
-                                <h5><a href="#" class="btn btn-outline-warning"><i class="fa fa-puzzle-piece"></i> Brainstorming</a></h5>
-                                </div>
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p>Metode untuk menggali semua kemungkinan sebagai solusi dari permasalahan yang ada.</p>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-info">
-                                <h5><a href="#" class="btn btn-outline-warning"><i class="fa fa-group"></i> Gathering Idea</a></h5>
-                                </div>
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p>Fokus pada Ide Utama, tunjukkan bahwa Ide tersebut layak dan mungkin dilakukan.</p>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-info">
-                                <h5><a href="#" class="btn btn-outline-success"><i class="fa fa-gears"></i> Project Development</a></h5>
-                                </div>
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p>Penyusunan berbagai rencana kegiatan, anggaran dan bukit-bukit kemenangan untuk menyelesaikan masalah utama.</p>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-info">
-                                <h5><a href="#" class="btn btn-outline-info"><i class="fa fa-rocket"></i> Pilot Project</a></h5>
-                                </div>
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p>Proses pengembangan dan realisasi solusi dari masalah yang dihadapi. Biasanya dibuat dalam skala kecil yang bisa dikembangkan untuk skala yang lebih besar.</p>
-                                </div>
-                            </li>
-                            <li class="timeline-item">
-                                <div class="timeline-info">
-                                <h5><a href="#" class="btn btn-outline-primary"><i class="fa fa-lightbulb-o"></i> Project Implementation</a></h5>
-                                </div>
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p> Ketika ide dan solusi yang ditawarkan memang terbukti mampu menyelesaikan masalah, maka tiba waktunya solusi dilaksanakan secara penuh di lingkup yang lebih luas.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 </div>
 @stop

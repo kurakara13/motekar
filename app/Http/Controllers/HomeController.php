@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Project;
+use App\Problem;
 class HomeController extends Controller
 {
     /**
@@ -23,6 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+      $project = Project::orderBy('created_at','DESC')->get();
+      $problem = Problem::all();
+        return view('home',['project'=>$project,'problem'=>$problem]);
     }
 }

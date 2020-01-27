@@ -18,6 +18,7 @@ use App\PilotProject;
 use App\DasarImplementasi;
 use App\Sosialisasi;
 use App\Impact;
+use App\Problem;
 class ProjectController extends Controller
 {
     public function myproject()
@@ -25,7 +26,8 @@ class ProjectController extends Controller
       $project = Project::all();
       $user = User::all();
       $unit = Unit::all();
-      return view('project.myproject',['users'=>$user,'projects'=>$project,'unit'=>$unit]);
+      $problem = Problem::all();
+      return view('project.myproject',['users'=>$user,'projects'=>$project,'unit'=>$unit,'problem'=>$problem]);
     }
     function myprojectstore(Request $request){
 
@@ -53,18 +55,26 @@ class ProjectController extends Controller
     {
       $project = Project::find($projectid);
       $user = User::all();
-      return view('project.projectdetail',['project'=>$project,'user'=>$user]);
+      $problem = Problem::where('user_id',Auth::user()->id)->get();
+      return view('project.projectdetail',['project'=>$project,'user'=>$user,'problem'=>$problem]);
+    }
+    public function updateproblem(Request $request,$id)
+    {
+      $project = Project::find($id);
+      $project->problem_id = $request->problem;
+      $project->save();
+      return redirect()->back()->with(['success' => 'Project has been successfully Updated!']);
     }
     public function paingain(Request $request,$id)
     {
       $paingain = Paingain::where('project_id',$id)->first();
       if (!isset($paingain)) {
         DB::table('paingains')->insert(
-            ['pain' => $request->pain, 'gain' => $request->gain,'project_id'=>$id]
+            ['pain' => $request->pain, 'gain' => $request->gain,'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
         );
       }else{
         DB::table('paingains')->where('project_id',$id)->update(
-            ['pain' => $request->pain, 'gain' => $request->gain]
+            ['pain' => $request->pain, 'gain' => $request->gain,'updated_at'=>date('Y-m-d H:i:s')]
         );
       }
 
@@ -75,11 +85,11 @@ class ProjectController extends Controller
       $paingain = Goldencircle::where('project_id',$id)->first();
       if (!isset($paingain)) {
         DB::table('goldencircles')->insert(
-            ['why' => $request->why, 'how' => $request->how,'what' => $request->what,'unique_value' => $request->unique_value,'project_id'=>$id]
+            ['why' => $request->why, 'how' => $request->how,'what' => $request->what,'unique_value' => $request->unique_value,'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
         );
       }else{
         DB::table('goldencircles')->where('project_id',$id)->update(
-            ['why' => $request->why, 'how' => $request->how,'what' => $request->what,'unique_value' => $request->unique_value,]
+            ['why' => $request->why, 'how' => $request->how,'what' => $request->what,'unique_value' => $request->unique_value,'updated_at'=>date('Y-m-d H:i:s')]
         );
       }
 
@@ -90,11 +100,11 @@ class ProjectController extends Controller
       $paingain = Summary::where('project_id',$id)->first();
       if (!isset($paingain)) {
         DB::table('summarys')->insert(
-            ['summary' => $request->summary, 'project_id'=>$id]
+            ['summary' => $request->summary, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
         );
       }else{
         DB::table('summarys')->where('project_id',$id)->update(
-            ['summary' => $request->summary,]
+            ['summary' => $request->summary,'updated_at'=>date('Y-m-d H:i:s')]
         );
       }
 
@@ -104,20 +114,16 @@ class ProjectController extends Controller
     {
       $paingain = Userjourney::where('project_id',$id)->first();
       if($request->file_upload != null) {
-        if($request->file_upload->getClientOriginalExtension() == "mp4"){
-          $type = "video";
-        }else {
-          $type = "image";
-        }
+
         $filename = 'userjourney-'.time() . '.' . $request->file_upload->getClientOriginalExtension();
         $request->file_upload->move(public_path('file'), $filename);
         if (!isset($paingain)) {
           DB::table('userjourneys')->insert(
-              ['file' => $filename, 'project_id'=>$id]
+              ['file' => $filename, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
           );
         }else{
           DB::table('userjourneys')->where('project_id',$id)->update(
-              ['file' => $filename]
+              ['file' => $filename,'updated_at'=>date('Y-m-d H:i:s')]
           );
         }
       }
@@ -137,11 +143,21 @@ class ProjectController extends Controller
         $request->doc_file->move(public_path('file/doc'), $filenamedoc);
         if (!isset($paingain)) {
           DB::table('product_developments')->insert(
-              ['mockup_file' => $filename,'development_story'=>$request->development_story,'doc_file'=>$filenamedoc, 'project_id'=>$id]
+              ['mockup_file' => $filename,'development_story'=>$request->development_story,'doc_file'=>$filenamedoc, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
           );
         }else{
           DB::table('product_developments')->where('project_id',$id)->update(
-              ['development_story'=>$request->development_story]
+              ['mockup_file' => $filename,'development_story'=>$request->development_story,'doc_file'=>$filenamedoc, 'updated_at'=>date('Y-m-d H:i:s')]
+          );
+        }
+      }else {
+        if (!isset($paingain)) {
+          DB::table('product_developments')->insert(
+              ['development_story'=>$request->development_story,'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
+          );
+        }else{
+          DB::table('product_developments')->where('project_id',$id)->update(
+              ['development_story'=>$request->development_story,'updated_at'=>date('Y-m-d H:i:s')]
           );
         }
       }
@@ -151,6 +167,7 @@ class ProjectController extends Controller
     public function pilotproject(Request $request,$id)
     {
       $paingain = PilotProject::where('project_id',$id)->first();
+      $periode = $request->range_start.'-'.$request->range_end;
       if($request->doc_file != null) {
 
         // $filename = 'mockup-'.time() . '.' . $request->mockup_file->getClientOriginalExtension();
@@ -159,11 +176,21 @@ class ProjectController extends Controller
         $request->doc_file->move(public_path('file/doc'), $filenamedoc);
         if (!isset($paingain)) {
           DB::table('pilot_projects')->insert(
-              ['lokasi_pilot'=>$request->lokasi_pilot,'development_story'=>$request->development_story,'doc_file'=>$filenamedoc, 'project_id'=>$id]
+              ['periode'=>$periode,'lokasi_pilot'=>$request->lokasi_pilot,'development_story'=>$request->development_story,'doc_file'=>$filenamedoc, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
           );
         }else{
           DB::table('pilot_projects')->where('project_id',$id)->update(
-              ['lokasi_pilot'=>$request->lokasi_pilot,'development_story'=>$request->development_story]
+              ['periode'=>$periode,'lokasi_pilot'=>$request->lokasi_pilot,'development_story'=>$request->development_story,'doc_file'=>$filenamedoc,'updated_at'=>date('Y-m-d H:i:s')]
+          );
+        }
+      }else {
+        if (!isset($paingain)) {
+          DB::table('pilot_projects')->insert(
+              ['periode'=>$periode,'lokasi_pilot'=>$request->lokasi_pilot,'development_story'=>$request->development_story, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
+          );
+        }else{
+          DB::table('pilot_projects')->where('project_id',$id)->update(
+              ['periode'=>$periode,'lokasi_pilot'=>$request->lokasi_pilot,'development_story'=>$request->development_story,'updated_at'=>date('Y-m-d H:i:s')]
           );
         }
       }
@@ -182,16 +209,32 @@ class ProjectController extends Controller
       }else {
         $filenamedoc = $paingain->avidance;
       }
-      if (!isset($paingain)) {
         DB::table('dasar_implementasi')->insert(
             ['dasar_implementasi'=>$request->dasar_implementasi,'avidance'=>$filenamedoc, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
         );
-      }else{
-        DB::table('dasar_implementasi')->where('project_id',$id)->update(
-            ['dasar_implementasi'=>$request->dasar_implementasi,'updated_at'=>date('Y-m-d H:i:s')]
-        );
-      }
       return redirect()->back()->with(['success' => 'Project has been successfully submitted!']);
+    }
+    public function deletedasar(Request $request,$id){
+      $flight = DasarImplementasi::find($id);
+
+      $flight->delete();
+      return redirect()->back()->with(['success' => 'Data has been successfully Deleted!']);
+    }
+    public function deleteimpact(Request $request,$id){
+      $flight = Impact::find($id);
+
+      $flight->delete();
+      return redirect()->back()->with(['success' => 'Data has been successfully Deleted!']);
+    }
+    public function updatestatus(Request $request,$id)
+    {
+      // code...
+      $flight = Project::find($id);
+
+      $flight->project_status = $request->status;
+
+      $flight->save();
+      return redirect()->back()->with(['success' => 'Data has been successfully Updated!']);
     }
     public function sosialisasi(Request $request,$id)
     {

@@ -10,7 +10,47 @@
 @section('content')
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12 bg-transparent">
-        <h3>{{$project->project_name}} <small><code class="highlighter-rouge">{{$project->project_status}}</code></small></h3>
+        <h3>{{$project->project_name}} <br> <small><code class="highlighter-rouge">{{$project->project_status}}</code></small> <button type="button" name="button" class="btn btn-primary" data-toggle="modal" data-target="#status">Update Status</button></h3>
+
+        <div class="modal fade launch-pricing-modal" id="status" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6>Update Status</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body pricing_page text-justify pt-4 mb-4">
+                      <form  action="{{url('update-status/'.$project->id)}}" method="post">
+                        @csrf
+                        <div class="row clearfix">
+                            <div class="col-12">
+                                <div class="demo-masked-input">
+                                    <div class="row clearfix">
+                                        <div class="form-group col-lg-12 col-md-12">
+                                            <b>Status</b>
+                                            <div class="input-group mb-3">
+                                            <select class="form-control" name="status">
+                                              <option value="Define Problem">Define Problem</option>
+                                              <option value="Ideation">Ideation</option>
+                                              <option value="On Development">On Development</option>
+                                              <option value="Implementation">Implementation</option>
+                                            </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary"> <i class="icon-plus"></i> Add Member</button>
+                                        </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      </form>
+                    </div>
+                </div>
+            </div>
+
         @if ($message = Session::get('success'))
           <div class="alert alert-success alert-block">
             <button type="button" class="close" data-dismiss="alert">×</button>
@@ -38,10 +78,10 @@
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Info-withicon"><i class="fa fa-file"></i> Report Submission</a></li>
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Info-withicon"><i class="fa fa-external-link"></i> Publication</a></li> -->
 
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#ToDoList-withicon"><i class="fa fa-list-ol"></i> Problem</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Backlog-withicon"><i class="fa fa-bars"></i> Idea & Solution</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Sprints-withicon"><i class="fa fa-tasks"></i> Product Development</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Analysis-withicon"><i class="fa fa-bar-chart-o"></i> Implementation</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#ToDoList-withicon"><i class="fa fa-list-ol"></i> Problem @if($project->problem_id !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Backlog-withicon"><i class="fa fa-bars"></i> Idea & Solution @if($project->summary !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" @if($project->summary !== null) href="#Sprints-withicon" @endif><i class="fa fa-tasks"></i> Product Development @if($project->pilotproject !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" @if($project->pilotproject !== null) href="#Analysis-withicon" @endif><i class="fa fa-bar-chart-o"></i> Implementation @if($project->sosialisasi !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
 
                 </ul>
                 <div class="tab-content">
@@ -369,111 +409,28 @@
                     <div class="tab-pane" id="ToDoList-withicon">
                         <div class="row clearfix">
                             <div class="col-lg-12 col-md-12">
+
                                 <div class="card">
+                                  <div class="body">
+                                    @if($project->problem_id === null)
+                                      <form class="" action="{{url('update-problem/'.$project->id)}}" method="post">
+                                        @csrf
+                                        <label>Pilih Problem</label>
+                                        <select class="form-control" name="problem">
+                                          @foreach($problem as $items)
+                                          <option value="{{$items->problem_id}}">{{$items->problem}}</option>
+                                          @endforeach
+                                        </select>
+                                        <button type="submit" class="btn btn-primary" name="button">Save</button>
+                                      </form>
+                                    @else
+                                      <label>Problem : {{$project->problem->problem}}</label><br>
+                                      <label>Problem Background</label><br>
+                                      <p>{!!$project->problem->background!!}</p>
+                                    @endif
+                                  </div>
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-custom spacing5">
-                                            <thead>
-                                                <tr>
-                                                    <th><a href="javascript:void(0);" class="btn btn-info btn-sm">Add New</a></th>
-                                                    <th class="w60 text-right">Due</th>
-                                                    <th class="w100">Priority</th>
-                                                    <th class="w60"><i class="icon-user"></i></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox" name="checkbox" checked="">
-                                                            <span>Product Event at New York</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-right">Feb 12-2019</td>
-                                                    <td><span class="badge badge-danger ml-0 mr-0">HIGH</span></td>
-                                                    <td>
-                                                        <div class="avtar-pic w30 bg-red" data-toggle="tooltip" data-placement="top" title="" data-original-title="Avatar Name"><span>SS</span></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox" name="checkbox">
-                                                            <span>Product Event for new product</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-right">Feb 18-2019</td>
-                                                    <td><span class="badge badge-warning ml-0 mr-0">MED</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar1.jpg" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" class="w30 rounded" data-original-title="Avatar Name">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox" name="checkbox" checked="">
-                                                            <span>Meeting with Team</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-right">March 02-2019</td>
-                                                    <td><span class="badge badge-success ml-0 mr-0">High</span></td>
-                                                    <td>
-                                                        <div class="avtar-pic w30 bg-indigo" data-toggle="tooltip" data-placement="top" title="" data-original-title="Avatar Name"><span>JK</span></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox" name="checkbox" checked="">
-                                                            <span>Product Event for new product</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-right">March 20-2019</td>
-                                                    <td><span class="badge badge-warning ml-0 mr-0">MED</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar1.jpg" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" class="w30 rounded" data-original-title="Avatar Name">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox" name="checkbox">
-                                                            <span>Product Event for new product</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-right">March 28-2019</td>
-                                                    <td><span class="badge badge-success ml-0 mr-0">LOW</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar2.jpg" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" class="w30 rounded" data-original-title="Avatar Name">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox" name="checkbox">
-                                                            <span>Campaign performance tracking</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-right">Apr 1</td>
-                                                    <td><span class="badge badge-danger ml-0 mr-0">HIGH</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar3.jpg" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" class="w30 rounded" data-original-title="Avatar Name">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox" name="checkbox" checked="">
-                                                            <span>Campaign Launch!</span>
-                                                        </label>
-                                                    </td>
-                                                    <td class="text-right">May 08</td>
-                                                    <td><span class="badge badge-warning ml-0 mr-0">MED</span></td>
-                                                    <td>
-                                                        <div class="avtar-pic w30 bg-green" data-toggle="tooltip" data-placement="top" title="" data-original-title="Avatar Name"><span>SP</span></div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +447,7 @@
                                   <div class="body">
                                     <ul class="nav nav-tabs">
                                         <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#first">Pain & Gain</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#second">User Journey Map</a></li>
+
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Third">Golden Circle & Unique Value</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Forth">Summary</a></li>
                                     </ul>
@@ -502,18 +459,18 @@
                                             <form  class="col-lg-12" action="{{route('project.myproject.paingain',$project->id)}}" method="post">
                                               @csrf
                                               <div class="col-lg-6 text-center mb-3" style="float:left">
-                                                <b class="">Pain</b>
+                                                <b class="text-green">Pain</b>
                                                 <div class="input-group">
 
-                                                  <textarea name="pain" class="form-control" rows="8" cols="80">@if($project->paingain->pain !== null) {{$project->paingain->pain}} @endif</textarea>
+                                                  <textarea name="pain" class="form-control" rows="8" cols="80">@if($project->paingain !== null) {{$project->paingain->pain}} @endif</textarea>
                                                 </div>
 
                                               </div>
                                               <div class="col-lg-6 text-center mb-3" style="float:left">
-                                                <b>Gain</b>
+                                                <b class="text-red">Gain</b>
                                                 <div class="input-group">
 
-                                                  <textarea name="gain" class="form-control" rows="8" cols="80">@if($project->paingain->gain !== null) {{$project->paingain->gain}} @endif</textarea>
+                                                  <textarea name="gain" class="form-control" rows="8" cols="80">@if($project->paingain !== null) {{$project->paingain->gain}} @endif</textarea>
                                                 </div>
 
                                               </div>
@@ -529,7 +486,7 @@
                                               <form class="col-md-12" action="{{route('project.myproject.userjourney',$project->id)}}" method="post" enctype="multipart/form-data">
                                                 @csrf
                                               <div class="col-md-12 img-thumbnail mb-3" style="min-height:200px">
-                                                @if($project->userjourney->file !== null)
+                                                @if($project->userjourney !== null)
                                                   <img src="{{asset('file/'.$project->userjourney->file)}}" class="img-responsive" width="100%" alt="">
                                                 @endif
                                               </div>
@@ -558,21 +515,21 @@
                                             <div class="col-lg-6 col-md-6 ">
                                               <b>Why</b>
                                               <div class="input-group">
-                                                <textarea name="why" class="form-control" rows="4 " cols="80">@if($project->goldencircle->why) {{$project->goldencircle->why}} @endif</textarea>
+                                                <textarea name="why" class="form-control" rows="4 " cols="80">@if($project->goldencircle !== null) {{$project->goldencircle->why}} @endif</textarea>
                                               </div>
                                               <b>How</b>
                                               <div class="input-group">
-                                                <textarea name="how" class="form-control" rows="4 " cols="80">@if($project->goldencircle->why) {{$project->goldencircle->how}} @endif</textarea>
+                                                <textarea name="how" class="form-control" rows="4 " cols="80">@if($project->goldencircle !== null) {{$project->goldencircle->how}} @endif</textarea>
                                               </div>
                                               <b>What</b>
                                               <div class="input-group">
-                                                <textarea name="what" class="form-control" rows="4 " cols="80">@if($project->goldencircle->why) {{$project->goldencircle->what}} @endif</textarea>
+                                                <textarea name="what" class="form-control" rows="4 " cols="80">@if($project->goldencircle !== null) {{$project->goldencircle->what}} @endif</textarea>
                                               </div>
                                             </div>
                                             <div class="col-md-12">
                                               <b>Unique Value</b>
                                               <div class="input-group">
-                                                <textarea name="unique_value" class="form-control" rows="4 " cols="80">@if($project->goldencircle->why) {{$project->goldencircle->unique_value}} @endif</textarea>
+                                                <textarea name="unique_value" class="form-control" rows="4 " cols="80">@if($project->goldencircle !== null) {{$project->goldencircle->unique_value}} @endif</textarea>
                                               </div>
                                               <button type="submit" name="button" class="btn btn-primary">Save</button>
                                             </div>
@@ -588,7 +545,7 @@
                                           <div class="row clearfix">
                                             <div class="col-md-12 ">
                                               <div class="input-group mb-3">
-                                                <textarea name="summary" class="form-control" rows="8" cols="120" placeholder="Ceritakan project yang akan anda kerjakan">@if($project->summary->summary !== null) {{$project->summary->summary}} @endif</textarea>
+                                                <textarea name="summary" class="form-control" rows="8" cols="120" placeholder="Ceritakan project yang akan anda kerjakan">@if($project->summary !== null) {{$project->summary->summary}} @endif</textarea>
 
                                               </div>
                                               <button type="submit" name="button" class="btn btn-primary">Save</button>
@@ -630,13 +587,14 @@
                                             <div class="col-lg-12  mb-3" style="float:left">
                                               <b class="">Development Story</b>
                                               <div class="input-group">
-                                              <textarea name="development_story" class="form-control" rows="8" cols="80">{{$project->productdevelopment->development_story}}</textarea>
+                                              <textarea name="development_story" class="form-control" rows="8" cols="80">@if($project->productdevelopment !== null){{$project->productdevelopment->development_story}} @endif</textarea>
                                               </div>
                                             </div>
                                             <div class="col-lg-12  mb-3" style="float:left">
                                               <b>Upload Mockup/Prototype/Poster</b><br>
-                                              @if($project->productdevelopment->mockup_file !== null)
-                                                <a href="{{asset('file/mockup/'.$project->productdevelopment->mockup_file)}}" target="_blank">File Mockup</a>
+                                              @if($project->productdevelopment !== null)
+                                                <a href="{{asset('file/mockup/'.$project->productdevelopment->mockup_file)}}" target="_blank">File Mockup</a><br>
+                                                <input type="file" name="mockup_file" value="">
                                               @else
                                               <div class="input-group">
                                                 <input type="file" name="mockup_file" value="">
@@ -645,8 +603,9 @@
                                             </div>
                                             <div class="col-lg-12  mb-3" style="float:left">
                                               <b>Upload Dokumentasi</b><br>
-                                              @if($project->productdevelopment->mockup_file !== null)
-                                                <a href="{{asset('file/mockup/'.$project->productdevelopment->doc_file)}}" target="_blank">File Dokumentasi</a>
+                                              @if($project->productdevelopment !== null)
+                                                <a href="{{asset('file/doc/'.$project->productdevelopment->doc_file)}}" target="_blank">File Dokumentasi</a><br>
+                                                <input type="file" name="doc_file" value="">
                                               @else
                                               <div class="input-group">
                                                 <input type="file" name="doc_file" value="">
@@ -659,7 +618,7 @@
 
                                       </div>
                                       <div class="tab-pane show vivify fadeIn " id="secondd">
-                                        <h2>User Journey Map</h2>
+                                        <!-- <h2>User Journey Map</h2> -->
                                         <section>
                                           <div class="row clearfix">
                                             <form class="col-md-12" action="{{route('project.myproject.pilotproject',$project->id)}}" method="post" enctype="multipart/form-data">
@@ -667,21 +626,31 @@
                                               <div class="col-lg-6">
                                                 <b>Lokasi Pilot</b>
                                                 <div class="input-group">
-                                                  <input type="text" class="form-control" name="lokasi_pilot" value="@if($project->pilotproject->lokasi_pilot !== null) {{$project->pilotproject->lokasi_pilot}} @endif">
+                                                  <input type="text" class="form-control" name="lokasi_pilot" value="@if($project->pilotproject !== null) {{$project->pilotproject->lokasi_pilot}} @endif">
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6">
+                                                <b>Periode</b><br>
+                                                <label>@if($project->pilotproject !== null ){{$project->pilotproject->periode}} @endif</label>
+                                                <div class="input-daterange input-group" data-provide="datepicker">
+                                                    <input type="text" class="input-sm form-control" name="range_start">
+                                                    <span class="input-group-addon range-to">to</span>
+                                                    <input type="text" class="input-sm form-control" name="range_end">
                                                 </div>
                                               </div>
                                               <div class="col-lg-12  mb-3" style="float:left">
                                                 <b class="">Development Story</b>
                                                 <div class="input-group">
-                                                  <textarea name="development_story" class="form-control" rows="8" cols="80">@if($project->pilotproject->development_story !== null) {{$project->pilotproject->development_story}} @endif</textarea>
+                                                  <textarea name="development_story" class="form-control" rows="8" cols="80">@if($project->pilotproject !== null) {{$project->pilotproject->development_story}} @endif</textarea>
                                                 </div>
 
                                               </div>
                                             <div class="col-md-12 mb-3 " style="float:left">
                                               <b>Upload Dokumentasi Pilot Project</b><br>
-                                              @if($project->pilotproject->doc_file !== null)
+                                              @if($project->pilotproject !== null)
 
-                                                <a href="{{asset('file/doc/'.$project->pilotproject->doc_file)}}">Dokumentasi</a>
+                                                <a href="{{asset('file/doc/'.$project->pilotproject)}}">Dokumentasi</a>
+                                                <input type="file" name="doc_file" value="">
                                               @else
                                                 <input type="file" name="doc_file" value="">
                                               @endif
@@ -726,20 +695,36 @@
                                               @csrf
                                               <b>Dasar Implementasi</b>
                                               <div class="input-group mb-3 ">
-                                                <input type="text" class="form-control" name="dasar_implementasi" value="@if($project->dasarimplementasi !== null) {{$project->dasarimplementasi->dasar_implementasi}} @endif">
+                                                <input type="text" class="form-control" name="dasar_implementasi" value="">
                                               </div>
                                               <b>Upload Avidance</b>
                                               <div class="input-group mb-3">
-                                                @if($project->dasarimplementasi->avidance !== null)
 
-                                                <a href="{{asset('file/doc/'.$project->dasarimplementasi->avidance)}}">Avidance File</a>
-                                                @else
                                                   <input type="file" name="avidance_file" value="">
-                                                 @endif
+
 
                                               </div>
                                               <button type="submit" class="btn btn-primary"> Save</button>
                                             </form>
+                                            <table class="table">
+                                              <thead>
+                                                <tr>
+                                                  <th>Dasar Implementasi</th>
+                                                  <th>Avidance File</th>
+                                                  <th>Action</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                @foreach($project->dasarimplementasi as $dasar)
+                                                <tr>
+                                                  <td>{{$dasar->dasar_implementasi}}</td>
+                                                  <td> <a href="{{asset('file/doc/'.$dasar->avidance)}}" target="_blank">File</a> </td>
+                                                  <td><button type="button" class="btn btn-sm btn-default " title="Delete" data-type="confirm" data-toggle="modal" data-target=".ondelete-modal{{$dasar->id}}"><i class="fa fa-trash-o text-danger"></i></button></td>
+                                                </tr>
+
+                                                @endforeach
+                                              </tbody>
+                                            </table>
                                           </div>
 
                                         </div>
@@ -778,6 +763,7 @@
                                               <tr>
                                                 <th>Impact</th>
                                                 <th>Detail</th>
+                                                <th>Action</th>
                                               </tr>
                                             </thead>
                                             <tbody>
@@ -785,6 +771,7 @@
                                               <tr>
                                                 <td>{{$impact->impact}}</td>
                                                 <td>{{$impact->detail}}</td>
+                                                <td><button type="button" class="btn btn-sm btn-default " title="Delete" data-type="confirm" data-toggle="modal" data-target=".onondelete-modal{{$impact->id}}"><i class="fa fa-trash-o text-danger"></i></button></td>
                                               </tr>
                                               @endforeach
                                             </tbody>
@@ -974,7 +961,52 @@
     </div>
 </div>
 
+@foreach($project->dasarimplementasi as $dasar1)
 
+<div class="modal fade ondelete-modal{{$dasar1->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+
+            <div class="modal-body pricing_page text-justify pt-4 mb-4">
+              <div class="text-center">
+                <i class="fa fa-warning text-warning" style="font-size:72px"></i>
+                <h2>Are you sure?</h2>
+                <h6>You will not be able to recover this imaginary file!</h6>
+                <form class="text-center" action="{{url('delete-dasar/'.$dasar1->id)}}" id="formDelete-{{$dasar1->id}}" method="post">
+                  @csrf
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Cancel</button>
+                  <button type="submit" class="btn btn-danger" name="button">Delete</button>
+                </form>
+              </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+@foreach($project->impact as $impact)
+
+<div class="modal fade onondelete-modal{{$impact->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+
+            <div class="modal-body pricing_page text-justify pt-4 mb-4">
+              <div class="text-center">
+                <i class="fa fa-warning text-warning" style="font-size:72px"></i>
+                <h2>Are you sure?</h2>
+                <h6>You will not be able to recover this imaginary file!</h6>
+                <form class="text-center" action="{{url('delete-impact/'.$impact->id)}}" id="formDelete-{{$impact->id}}" method="post">
+                  @csrf
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Cancel</button>
+                  <button type="submit" class="btn btn-danger" name="button">Delete</button>
+                </form>
+              </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 @stop
 
 @section('page-styles')
@@ -993,6 +1025,7 @@
         background: url('../assets/images/details_close.png') no-repeat center center;
     }
 </style>
+<link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/nestable/jquery-nestable.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/c3/c3.min.css') }}">
@@ -1012,6 +1045,7 @@
 <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/pages/tables/jquery-datatable.js') }}"></script>
 <script src="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 <script type="text/javascript">
 

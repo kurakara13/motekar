@@ -11,6 +11,11 @@ class KnowledgeController extends Controller
       $project = Project::all();
       return view('knowledge.knowledge',['projects'=>$project]);
     }
+    public function problem($id)
+    {
+      $project = Project::find($id);
+      return view('knowledge.knowledge-problem',['projects'=>$project]);
+    }
     public function knowledgedetail($id)
     {
       // code...

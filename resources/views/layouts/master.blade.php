@@ -34,7 +34,7 @@
 </style>
 </head>
 
-<body class="theme-green font-krub light_version">
+<body class="theme-red font-krub light_version">
 
 <!-- Page Loader -->
 <div class="page-loader-wrapper light_version">

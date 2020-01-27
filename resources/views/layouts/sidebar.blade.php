@@ -1,7 +1,7 @@
 <div id="left-sidebar" class="sidebar">
     <div class="navbar-brand">
         <a href="{{route('home')}}">
-          <h1 class="green" style="color:#038207"><strong>MOTEKAR</strong></h1>
+          <h1 class="text-red" ><strong>MOTEKAR</strong></h1>
         </a>
         <button type="button" class="btn-toggle-offcanvas btn btn-sm float-right"><i class="lnr lnr-menu fa fa-chevron-circle-left"></i></button>
     </div>

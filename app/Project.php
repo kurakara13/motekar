@@ -38,13 +38,17 @@ class Project extends Model
   {
       return $this->hasOne('App\ProductDevelopment','project_id');
   }
+  public function problem()
+  {
+      return $this->belongsTo('App\Problem','problem_id');
+  }
   public function pilotproject()
   {
       return $this->hasOne('App\PilotProject','project_id');
   }
   public function dasarimplementasi()
   {
-    return $this->hasOne('App\DasarImplementasi','project_id');
+    return $this->hasMany('App\DasarImplementasi','project_id');
   }
   public function sosialisasi()
   {

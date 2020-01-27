@@ -61,7 +61,7 @@
                     <div class="card-footer" style="background:#fff; border-color:#e1e8ed" >
                       <div class="row clearfix">
                         <div class="col-md-6">
-                          <a href="#">Like</a>
+                          <a href="#" onclick="like('{{$item->sosialisasi->id}}')">Like</a>
                         </div>
                         <div class="col-md-6">
                           <a href="#">Comment</a>
@@ -123,4 +123,17 @@
 
 <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/pages/medias/image-gallery.js') }}"></script>
+<script type="text/javascript">
+  function like(id) {
+    var url = "{{url('like/')}}/"+id;
+    console.log(url);
+    $.post(url,
+    {
+      user_id: '{{Auth::user()->id}}',
+    },
+    function(data,status){
+      console.log(status);
+    });
+  }
+</script>
 @stop

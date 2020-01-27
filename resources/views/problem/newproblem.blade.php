@@ -106,7 +106,7 @@
 
                           <div class="form-group">
                               <label>Unit</label>
-                              <select name="unit_id" class="form-control" required>
+                              <select name="unit_id" class=" select form-control" required>
                                 <option value="">-Pilih Unit-</option>
                                 @foreach($unit as $item)
                                 <option value="{{$item->id}}">{{$item->unit_name}}</option>
@@ -162,6 +162,9 @@
 <script src="{{ asset('assets/vendor/parsleyjs/js/parsley.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/summernote/dist/summernote.js') }}"></script>
 <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{asset('assets/vendor/selects/select2-bootstrap.css')}}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 <script>
 $(function() {
     // validation needs name of the element
@@ -171,6 +174,15 @@ $(function() {
     $('#basic-form').parsley();
 });
 </script>
+<script type="text/javascript">
 
+$(document).ready(function() {
+  $(".select").select2({
+    theme: "bootstrap",
+    width:'100%',
+     placeholder: "Pilih Member"
+   });
+});
+</script>
 
 @stop

@@ -11,4 +11,8 @@ class Sosialisasi extends Model
     {
       return $this->hasMany('App\SosialisasiImage', 'sosialisasi_id');
     }
+    public function like($value='')
+    {
+      return $this->hasMany('App\Like', 'sosialisasi_id');
+    }
 }

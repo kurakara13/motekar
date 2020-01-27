@@ -52,11 +52,11 @@
 
                           <div class="row clearfix">
                             <div class="col-md-6">
-                              <label>Status : </label><br>
-                              <label>Last Update : </label>
+                              <label>Status : @if($projects->problem_id !== null) Problem Defined @endif</label><br>
+                              <label>Last Update : @if($projects->problem_id !== null) {{date_format($projects->updated_at,'Y-m-d')}} @endif</label>
                             </div>
                             <div class="col-md-6">
-                              <a href="#"> <i class="fa fa-folder-open"></i> Open</a>
+                              <a href="{{route('knowledge.problem',$projects->id)}}"> <i class="fa fa-folder-open"></i> Open</a>
                             </div>
                           </div>
 
@@ -72,8 +72,8 @@
 
                           <div class="row clearfix">
                             <div class="col-md-6">
-                              <label>Status : </label><br>
-                              <label>Last Update : </label>
+                              <label>Status : @if($projects->paingain !== null) Defined @endif</label><br>
+                              <label>Last Update : @if($projects->paingain !== null) {{date_format($projects->paingain->updated_at,'Y-m-d')}} @endif</label>
                             </div>
                             <div class="col-md-6">
                               <a href="{{route('knowledge.brainstorming',$projects->id)}}"> <i class="fa fa-folder-open"></i> Open</a>
@@ -92,8 +92,8 @@
 
                           <div class="row clearfix">
                             <div class="col-md-6">
-                              <label>Status : </label><br>
-                              <label>Last Update : </label>
+                              <label>Status : @if($projects->goldencircle !== null) Defined @endif</label><br>
+                              <label>Last Update : @if($projects->goldencircle !== null) {{date_format($projects->goldencircle->updated_at,'Y-m-d')}} @endif</label>
                             </div>
                             <div class="col-md-6">
                               <a href="{{route('knowledge.gathering',$projects->id)}}"> <i class="fa fa-folder-open"></i> Open</a>
@@ -112,8 +112,8 @@
 
                           <div class="row clearfix">
                             <div class="col-md-6">
-                              <label>Status : </label><br>
-                              <label>Last Update : </label>
+                              <label>Status : @if($projects->productdevelopment !== null) on Development @endif</label><br>
+                              <label>Last Update : @if($projects->productdevelopment !== null) {{date_format($projects->productdevelopment->updated_at,'Y-m-d')}} @endif</label>
                             </div>
                             <div class="col-md-6">
                               <a href="{{route('knowledge.development',$projects->id)}}"> <i class="fa fa-folder-open"></i> Open</a>
@@ -132,11 +132,11 @@
 
                           <div class="row clearfix">
                             <div class="col-md-6">
-                              <label>Status : </label><br>
-                              <label>Last Update : </label>
+                              <label>Status : @if($projects->pilotproject !== null) on Development @endif</label><br>
+                              <label>Last Update : @if($projects->pilotproject !== null) {{date_format($projects->pilotproject->updated_at,'Y-m-d')}} @endif</label>
                             </div>
                             <div class="col-md-6">
-                              <a href="#"> <i class="fa fa-folder-open"></i> Open</a>
+                              <a href="{{route('knowledge.pilot',$projects->id)}}"> <i class="fa fa-folder-open"></i> Open</a>
                             </div>
                           </div>
 
@@ -152,8 +152,8 @@
 
                           <div class="row clearfix">
                             <div class="col-md-6">
-                              <label>Status : </label><br>
-                              <label>Last Update : </label>
+                              <label>Status : @if($projects->sosialisasi !== null) Implementation @endif</label><br>
+                              <label>Last Update : @if($projects->sosialisasi !== null) {{date_format($projects->sosialisasi->updated_at,'Y-m-d')}}  @endif</label>
                             </div>
                             <div class="col-md-6">
                               <a href="#"> <i class="fa fa-folder-open"></i> Open</a>

@@ -18,7 +18,10 @@ Auth::routes(['register' => false]);
 
 Route::group(['middleware'=>['auth']], function () {
   Route::get('/', 'HomeController@index')->name('home');
-
+  Route::post('/delete-dasar/{id}','ProjectController@deletedasar');
+  Route::post('/delete-impact/{id}','ProjectController@deleteimpact');
+  Route::post('/update-status/{id}','ProjectController@updatestatus');
+  Route::post('/update-problem/{id}','ProjectController@updateproblem');
   /* Problem */
   Route::get('problem', function ()             { return redirect('problem/newproblem'); });
   Route::get('problem/newproblem',                        'ProblemController@newproblem')->name('problem.newproblem');
@@ -48,6 +51,7 @@ Route::get('project/my-project/detail/{id}',                        'ProjectCont
 
 
 Route::get('knowledge',                        'KnowledgeController@knowledge')->name('knowledge');
+Route::get('knowledge/problem/{id}',                        'KnowledgeController@problem')->name('knowledge.problem');
 Route::get('knowledge/detail/{id}',                        'KnowledgeController@knowledgedetail')->name('knowledge.detail');
 Route::get('knowledge/brainstorming/{id}',                        'KnowledgeController@brainstorming')->name('knowledge.brainstorming');
 Route::get('knowledge/gathering/{id}',                        'KnowledgeController@gathering')->name('knowledge.gathering');
@@ -56,7 +60,7 @@ Route::get('knowledge/pilot/{id}',                        'KnowledgeController@p
   //
   Route::get('inovator/list',                'InovatorController@index')->name('inovator.list');
 });
-
+Route::post('like/{id}','SosialisasiController@like');
 Route::group(['middleware'=>['auth:admin'], 'prefix' => 'admin'], function () {
   Route::get('/', 'Admin\HomeController@index')->name('admin.home');
   Route::resource('/inovator/list',                'Admin\InovatorController', ['as' => 'admin.innovator']);

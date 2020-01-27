@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12">
                                   <b>Unit</b>
-                                  <select name="unit_id" class="form-control" required>
+                                  <select name="unit_id" class="select form-control" required>
                                     <option value="">-Pilih Unit-</option>
                                     @foreach($unit as $item)
                                     <option value="{{$item->id}}">{{$item->unit_name}}</option>

@@ -30,4 +30,22 @@ class InovatorController extends BaseController
 
       return redirect()->back();
     }
+
+    function update(Request $request, $id){
+      $user = User::find($id);
+      $user->username = $request->nik;
+      $user->name = $request->nama;
+      $user->posisi = $request->posisi;
+      $user->unit = $request->id_unit;
+      $user->save();
+
+      return redirect()->back();
+    }
+
+    function destroy($id){
+      $user = User::find($id);
+      $user->delete();
+
+      return redirect()->back();
+    }
 }

@@ -59,8 +59,6 @@ Route::get('knowledge/pilot/{id}',                        'KnowledgeController@p
 
 Route::group(['middleware'=>['auth:admin'], 'prefix' => 'admin'], function () {
   Route::get('/', 'Admin\HomeController@index')->name('admin.home');
-  Route::get('/inovator/list',                'Admin\InovatorController@index')->name('admin.inovator.list');
-  Route::post('/inovator/list',                'Admin\InovatorController@store');
-  Route::get('/unit/list',                'Admin\UnitController@index')->name('admin.unit.list');
-  Route::post('/unit/list',                'Admin\UnitController@store');
+  Route::resource('/inovator/list',                'Admin\InovatorController', ['as' => 'admin.innovator']);
+  Route::resource('/unit/list',                'Admin\UnitController', ['as' => 'admin.unit']);
 });

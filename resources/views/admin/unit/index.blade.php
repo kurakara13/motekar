@@ -30,6 +30,7 @@
                               <th class="text-center">No</th>
                               <th class="text-center">Unit Name</th>
                               <th class="text-center">Created Date</th>
+                              <th class="text-center">Action</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -38,6 +39,14 @@
                             <td class="text-center">{{$index+1}}</td>
                             <td class="text-center">{{$pp->unit_name}}</td>
                             <td class="text-center">{{$pp->created_at}}</td>
+                            <td class="text-center" style="display:flex">
+                              <button class="btn btn-primary fa fa-edit" onclick="edit_data({{$pp}})" data-toggle="modal" data-target=".launch-edit-modal"style="margin-right:10px"></button>
+                              <form action="{{route('admin.unit.list.destroy', $pp->id)}}" method="post">
+                              @method("DELETE")
+                              @csrf
+                                <button type="submit" class="btn btn-danger fa fa-trash"></button>
+                              </form>
+                            </td>
                         </tr>
                       @endforeach
                       </tbody>
@@ -50,7 +59,7 @@
 
 <!-- modal join  -->
 <div class="modal fade launch-pricing-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <form action="{{route('admin.unit.list')}}" method="post" id="form-method-join">
+  <form action="{{route('admin.unit.list.store')}}" method="post" id="form-method-join">
     @csrf
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -69,6 +78,33 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
+        </div>
+    </div>
+  </form>
+</div>
+
+<!-- modal join  -->
+<div class="modal fade launch-edit-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <form action="" method="post" id="form-method-edit">
+    @method("PUT")
+    @csrf
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h5 id="modal-header-status">Edit Unit</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body pricing_page pt-4 mb-4">
+            <div class="form-group">
+              <label for="basic-url">Unit Name</label>
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" id="unit_name" name="unit_name" placeholder="Unit Name" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
         </div>
     </div>
   </form>
@@ -109,6 +145,12 @@
 $('#multiselect3-all').multiselect({
     includeSelectAllOption: true,
 });
+
+function edit_data(data){
+  $("#unit_name").val(data.unit_name);
+
+  $("#form-method-edit").attr('action', '{{url("admin/unit/list")}}/'+data.id);
+}
 </script>
 
 @stop

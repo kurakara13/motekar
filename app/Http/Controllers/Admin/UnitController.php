@@ -26,4 +26,19 @@ class UnitController extends BaseController
 
       return redirect()->back();
     }
+
+    function update(Request $request, $id){
+      $unit = Unit::find($id);
+      $unit->unit_name = $request->unit_name;
+      $unit->save();
+
+      return redirect()->back();
+    }
+
+    function destroy($id){
+      $unit = Unit::find($id);
+      $unit->delete();
+
+      return redirect()->back();
+    }
 }

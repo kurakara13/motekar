@@ -33,6 +33,7 @@
                               <th class="text-center">Unit</th>
                               <th class="text-center">Problem(s) Involved</th>
                               <th class="text-center">Project(s) Involved</th>
+                              <th class="text-center">Action</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -49,6 +50,14 @@
                               <td class="text-center">{{$pp->unit}}</td>
                               <td class="text-center">{{$pp->problem_count}}</td>
                               <td class="text-center">0</td>
+                              <th class="text-center" style="display:flex">
+                                <button class="btn btn-primary fa fa-edit" onclick="edit_data({{$pp}})" data-toggle="modal" data-target=".launch-edit-modal"style="margin-right:10px"></button>
+                                <form action="{{route('admin.innovator.list.destroy', $pp->id)}}" method="post">
+                                @method("DELETE")
+                                @csrf
+                                  <button type="submit" class="btn btn-danger fa fa-trash"></button>
+                                </form>
+                              </th>
                           </tr>
                       @endforeach
                       </tbody>
@@ -61,7 +70,7 @@
 
 <!-- modal join  -->
 <div class="modal fade launch-pricing-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <form action="{{route('admin.inovator.list')}}" method="post" id="form-method-join">
+  <form action="{{route('admin.innovator.list.store')}}" method="post" id="form-method-join">
     @csrf
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -92,6 +101,57 @@
                 <label for="basic-url">Unit</label>
                 <div class="input-group mb-3">
                     <select class="form-control" name="id_unit" required>
+                      <option>-Pilih Unit-</option>
+                      @foreach($unit as $item)
+                      <option value="{{$item->id}}">{{$item->unit_name}}</option>
+                      @endforeach
+                    </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+        </div>
+    </div>
+  </form>
+</div>
+
+<!-- modal join  -->
+<div class="modal fade launch-edit-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <form action="" method="post" id="form-method-edit">
+    <input type="hidden" id="id_innovator" name="id_innovator">
+    @method("PUT")
+    @csrf
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modal-header-status">Edit Innovator</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body pricing_page pt-4 mb-4">
+              <div class="form-group">
+                <label for="basic-url">NIK</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="nik" name="nik" placeholder="NIK" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="basic-url">Nama</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="basic-url">Posisi</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="posisi" name="posisi" placeholder="Posisi" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="basic-url">Unit</label>
+                <div class="input-group mb-3">
+                    <select class="form-control" id="unit" name="id_unit" required>
                       <option>-Pilih Unit-</option>
                       @foreach($unit as $item)
                       <option value="{{$item->id}}">{{$item->unit_name}}</option>
@@ -143,6 +203,22 @@
 $('#multiselect3-all').multiselect({
     includeSelectAllOption: true,
 });
+
+function edit_data(data){
+  console.log(data);
+  $("#id_innovator").val(data.id);
+  $("#nik").val(data.username);
+  $("#nama").val(data.name);
+  $("#posisi").val(data.posisi);
+  $.each($("#unit option"), function(){
+    if($(this).text() == data.unit){
+      $(this).attr('selected','');
+    }
+  })
+
+  $("#form-method-edit").attr('action', '{{url("admin/inovator/list")}}/'+data.id);
+
+}
 </script>
 
 @stop

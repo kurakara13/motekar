@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('image/kipas-sakti.png') }}" type="image/x-icon">
     <title>Motekar</title>
     <meta name="description" content="@yield('meta_description', config('app.name'))">
     <meta name="author" content="@yield('meta_author', config('app.name'))">

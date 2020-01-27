@@ -23,11 +23,26 @@ class ProjectController extends Controller
 {
     public function myproject()
     {
-      $project = Project::all();
+      $project = Project::where('project_owner',Auth::user()->id)->get();
       $user = User::all();
       $unit = Unit::all();
       $problem = Problem::all();
       return view('project.myproject',['users'=>$user,'projects'=>$project,'unit'=>$unit,'problem'=>$problem]);
+    }
+    public function problemsubmit(Request $request,$id)
+    {
+      $problem = new Problem;
+      $problem->user_id =  Auth::user()->id;
+      $problem->unit_id = $request->unit_id;
+      $problem->problem =  "Bagaimana $request->bagaimana dari $request->dari menjadi $request->menjadi di $request->di dalam waktu $request->periode?";
+      $problem->background =  $request->background;
+      $problem->asal_masalah =  implode(',',$request->asal_masalah);
+      $problem->status = '1';
+      $problem->save();
+      $project = Project::find($id);
+      $project->problem_id = $problem->problem_id;
+      $project->save();
+      return redirect()->back()->with(['success' => 'Project has been successfully submitted!']);
     }
     function myprojectstore(Request $request){
 
@@ -56,7 +71,8 @@ class ProjectController extends Controller
       $project = Project::find($projectid);
       $user = User::all();
       $problem = Problem::where('user_id',Auth::user()->id)->get();
-      return view('project.projectdetail',['project'=>$project,'user'=>$user,'problem'=>$problem]);
+      $unit = Unit::all();
+      return view('project.projectdetail',['project'=>$project,'user'=>$user,'unit'=>$unit,'problem'=>$problem]);
     }
     public function updateproblem(Request $request,$id)
     {
@@ -229,12 +245,31 @@ class ProjectController extends Controller
     public function updatestatus(Request $request,$id)
     {
       // code...
+
       $flight = Project::find($id);
+      if ($request->status === 'On Development') {
+        if ($flight->summary !== null) {
+          $flight->project_status = $request->status;
 
-      $flight->project_status = $request->status;
+          $flight->save();
+          return redirect()->back()->with(['success' => 'Data has been successfully Updated!']);
+        }else {
+          return redirect()->back()->with(['error' => 'Data has been failed Updated!']);
+        }
+        // code...
+      }elseif ($request->status === 'On Development') {
+        // code...
+        if ($flight->pilotproject !== null) {
+          $flight->project_status = $request->status;
 
-      $flight->save();
-      return redirect()->back()->with(['success' => 'Data has been successfully Updated!']);
+          $flight->save();
+          return redirect()->back()->with(['success' => 'Data has been successfully Updated!']);
+        }else {
+          return redirect()->back()->with(['error' => 'Data has been failed Updated!']);
+        }
+      }
+
+
     }
     public function sosialisasi(Request $request,$id)
     {

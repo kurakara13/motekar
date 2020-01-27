@@ -38,6 +38,7 @@ Route::group(['middleware'=>['auth']], function () {
 
 Route::get('project/my-project',                        'ProjectController@myproject')->name('project.myproject');
 Route::post('project/my-project',                        'ProjectController@myprojectstore')->name('project.myproject.store');
+Route::post('project/problem/submit/{id}',                        'ProjectController@problemsubmit')->name('project.problem.submit');
 Route::post('project/my-project/paingain/{id}',                        'ProjectController@paingain')->name('project.myproject.paingain');
 Route::post('project/my-project/userjourney/{id}',                        'ProjectController@userjourney')->name('project.myproject.userjourney');
 Route::post('project/my-project/goldencircle/{id}',                        'ProjectController@goldencircle')->name('project.myproject.goldencircle');

@@ -27,22 +27,13 @@
             <div class="slider-item alert-success" >
               <div class="row slider-text align-items-center justify-content-center">
                 <div class="col-md-12 ftco-animate text-center">
-                  <br>
-                  <br>
-                  <h4>
-                    <span class="fa fa-quote-left"></span>
-                    Teruslah kreatif dan berinovasi! Itulah budaya Motekar!
-                    <span class="fa fa-quote-right"></span>
-                  </h4>
-                    <h3>- Mohammad Syibli [GM Telkom Bogor]</h3>
-                  <br>
-                  <br>
-                  <br><br>
+                  <img src="{{asset('image/Bogor.png')}}" alt="">
                 </div>
               </div>
             </div>
           </div>
           @foreach($project as $item)
+          <?php if ($item->sosialisasi !== null): ?>
             <div class="card mt-3">
 
                   <div class="body">
@@ -71,6 +62,8 @@
                     </div>
                   </div>
                 </div>
+          <?php endif; ?>
+
           @endforeach
         </div>
         <div class="col-lg-4 col-md-12">

@@ -36,7 +36,7 @@
                                               <option value="Implementation">Implementation</option>
                                             </select>
                                             </div>
-                                            <button type="submit" class="btn btn-primary"> <i class="icon-plus"></i> Add Member</button>
+                                            <button type="submit" class="btn btn-primary"> <i class="icon-plus"></i> Update </button>
                                         </div>
 
 
@@ -80,8 +80,8 @@
 
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#ToDoList-withicon"><i class="fa fa-list-ol"></i> Problem @if($project->problem_id !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Backlog-withicon"><i class="fa fa-bars"></i> Idea & Solution @if($project->summary !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" @if($project->summary !== null) href="#Sprints-withicon" @endif><i class="fa fa-tasks"></i> Product Development @if($project->pilotproject !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" @if($project->pilotproject !== null) href="#Analysis-withicon" @endif><i class="fa fa-bar-chart-o"></i> Implementation @if($project->sosialisasi !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Sprints-withicon" ><i class="fa fa-tasks"></i> Development @if($project->pilotproject !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab"href="#Analysis-withicon" ><i class="fa fa-bar-chart-o"></i> Implementation @if($project->sosialisasi !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
 
                 </ul>
                 <div class="tab-content">
@@ -413,16 +413,64 @@
                                 <div class="card">
                                   <div class="body">
                                     @if($project->problem_id === null)
-                                      <form class="" action="{{url('update-problem/'.$project->id)}}" method="post">
-                                        @csrf
-                                        <label>Pilih Problem</label>
-                                        <select class="form-control" name="problem">
-                                          @foreach($problem as $items)
-                                          <option value="{{$items->problem_id}}">{{$items->problem}}</option>
-                                          @endforeach
-                                        </select>
-                                        <button type="submit" class="btn btn-primary" name="button">Save</button>
-                                      </form>
+                                    <form id="basic-form" action="{{route('project.problem.submit',$project->id)}}" method="post" novalidate>
+                                    {{ csrf_field() }}
+                                        <h6 class="text-success">Problem *</h6>
+                                        <div class="form-group">
+                                            <label>Bagaimana</label>
+                                            <input type="text" name="bagaimana" class="form-control" placeholder="Sampaikan masalah yang ditemukan" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dari</label>
+                                            <input type="text" name="dari" class="form-control" placeholder="Kondisi awal saat masalah ditemukan" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Menjadi</label>
+                                            <input type="text" name="menjadi" class="form-control" placeholder="Kondisi akhir yang ingin dicapai" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Di</label>
+                                            <input type="text" name="di" class="form-control" placeholder="Lokasi ditemukannya masalah" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dalam waktu</label>
+                                            <input type="text" name="periode" class="form-control" placeholder="Estimasi target penyelesaian masalah" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Unit</label>
+                                            <select name="unit_id" class=" select form-control" required>
+                                              <option value="">-Pilih Unit-</option>
+                                              @foreach($unit as $item)
+                                              <option value="{{$item->id}}">{{$item->unit_name}}</option>
+                                              @endforeach
+                                            </select>
+                                        </div>
+                                        <br>
+
+                                        <div class="form-group">
+                                        <h6 class="text-success">Asal ditemukanannya masalah *</h6>
+                                            <div class="form-group">
+                                                <select id="food" name="asal_masalah[]" class="multiselect multiselect-custom" multiple="multiple" data-parsley-required data-parsley-trigger-after-failure="change" data-parsley-errors-container="#error-multiselect">
+                                                    <option value="Hasil Review">Hasil Review</option>
+                                                    <option value="Suara Pelanggan">Suara Pelanggan</option>
+                                                    <option value="Hasil Audit & Assessment">Hasil Audit & Assessment</option>
+                                                    <option value="Dorongan Obsesi Perusahaan">Dorongan Obsesi Perusahaan</option>
+                                                    <option value="Peluang Yang Diberikan Pimpinan">Peluang Yang Diberikan Pimpinan</option>
+                                                    <option value="Inisiatif Individu">Inisiatif Individu</option>
+                                                </select>
+                                            </div>
+                                            <p id="error-multiselect"></p>
+                                        </div>
+                                        <br>
+                                        <h6 class="text-success">Problem Background *</h6>
+                                        <div class="form-group">
+                                            <textarea class="form-control ckeditor" id="ckeditor" name="background">
+                                            </textarea>
+                                        </div>
+                                        <br>
+                                        <button type="submit" class="btn btn-primary fa fa-paper-plane"> Submit Problem</button>
+                                    </form>
                                     @else
                                       <label>Problem : {{$project->problem->problem}}</label><br>
                                       <label>Problem Background</label><br>
@@ -1047,6 +1095,36 @@
 <script src="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+<script src="{{ asset('assets/vendor/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
+<script src="{{ asset('assets/js/pages/forms/editors.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script><!-- Bootstrap Tags Input Plugin Js -->
+<script src="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
+<script src="{{ asset('assets/vendor/parsleyjs/js/parsley.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/summernote/dist/summernote.js') }}"></script>
+<script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{asset('assets/vendor/selects/select2-bootstrap.css')}}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+<script>
+$(function() {
+    // validation needs name of the element
+    $('#food').multiselect();
+
+    // initialize after multiselect
+    $('#basic-form').parsley();
+});
+</script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+  $(".select").select2({
+    theme: "bootstrap",
+    width:'100%',
+     placeholder: "Pilih Member"
+   });
+});
+</script>
 <script type="text/javascript">
 
 $(document).ready(function() {

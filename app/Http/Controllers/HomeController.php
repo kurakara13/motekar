@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-      $project = Project::orderBy('created_at','DESC')->get();
+      $project = Project::with('sosialisasi.comment.user')->with('sosialisasi.like')->orderBy('created_at','DESC')->get();
       $problem = Problem::all();
         return view('home',['project'=>$project,'problem'=>$problem]);
     }

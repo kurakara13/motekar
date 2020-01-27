@@ -15,4 +15,9 @@ class Sosialisasi extends Model
     {
       return $this->hasMany('App\Like', 'sosialisasi_id');
     }
+
+    public function comment()
+    {
+      return $this->hasMany('App\Comments', 'sosialisasi_id');
+    }
 }

@@ -60,8 +60,11 @@ Route::get('knowledge/development/{id}',                        'KnowledgeContro
 Route::get('knowledge/pilot/{id}',                        'KnowledgeController@pilot')->name('knowledge.pilot');
   //
   Route::get('inovator/list',                'InovatorController@index')->name('inovator.list');
+
+Route::post('comment/{id}','SosialisasiController@comment')->name('comment.store');
+Route::post('like/{id}','SosialisasiController@like')->name('like.store');
 });
-Route::post('like/{id}','SosialisasiController@like');
+
 Route::group(['middleware'=>['auth:admin'], 'prefix' => 'admin'], function () {
   Route::get('/', 'Admin\HomeController@index')->name('admin.home');
   Route::resource('/inovator/list',                'Admin\InovatorController', ['as' => 'admin.innovator']);

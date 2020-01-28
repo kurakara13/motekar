@@ -58,8 +58,12 @@ Route::get('knowledge/brainstorming/{id}',                        'KnowledgeCont
 Route::get('knowledge/gathering/{id}',                        'KnowledgeController@gathering')->name('knowledge.gathering');
 Route::get('knowledge/development/{id}',                        'KnowledgeController@development')->name('knowledge.development');
 Route::get('knowledge/pilot/{id}',                        'KnowledgeController@pilot')->name('knowledge.pilot');
-  //
-  Route::get('inovator/list',                'InovatorController@index')->name('inovator.list');
+//
+Route::get('inovator/list',                'InovatorController@index')->name('inovator.list');
+
+Route::get('profile','HomeController@profile')->name('profile');
+Route::post('profile','HomeController@update_profile')->name('update.profile');
+Route::post('profile/password','HomeController@update_password')->name('update.password');
 
 Route::post('comment/{id}','SosialisasiController@comment')->name('comment.store');
 Route::post('like/{id}','SosialisasiController@like')->name('like.store');

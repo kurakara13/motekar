@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Project;
+use App\Unit;
+use App\User;
 class KnowledgeController extends Controller
 {
     public function knowledge()
@@ -20,7 +22,9 @@ class KnowledgeController extends Controller
     {
       // code...
       $project = Project::find($id);
-      return view('knowledge.knowledge-detail',['projects'=>$project]);
+      $unit = Unit::all();
+      $user = User::all();
+      return view('knowledge.knowledge-detail',['project'=>$project,'unit'=>$unit,'user'=>$user]);
     }
     public function brainstorming($id)
     {

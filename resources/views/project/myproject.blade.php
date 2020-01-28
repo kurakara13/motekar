@@ -101,8 +101,29 @@
                                   <td class="text-center">{{$item->project_status}}</td>
                                   <td class="text-center">
                                     <a href="{{route('project.myprojectdetail',$item->id)}}"> <i class="fa fa-folder-open"></i> Open</a>
+                                    <a href="#" data-type="confirm" data-toggle="modal" data-target=".ondelete-modal{{$item->id}}"> <i class="fa fa-trash"></i> Delete</a>
                                   </td>
                               </tr>
+                              <div class="modal fade ondelete-modal{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog ">
+                                      <div class="modal-content">
+
+                                          <div class="modal-body pricing_page text-justify pt-4 mb-4">
+                                            <div class="text-center">
+                                              <i class="fa fa-warning text-warning" style="font-size:72px"></i>
+                                              <h2>Are you sure?</h2>
+                                              <h6>You will not be able to recover this imaginary file!</h6>
+                                              <form class="text-center" action="{{route('project.deleteproject',$item->id)}}" id="formDelete-{{$item->id}}" method="post">
+                                                @csrf
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Cancel</button>
+                                                <button type="submit" class="btn btn-danger" name="button">Delete</button>
+                                              </form>
+                                            </div>
+
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
                             @endforeach
                           </tbody>
                   </table>

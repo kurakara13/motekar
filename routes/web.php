@@ -37,6 +37,7 @@ Route::group(['middleware'=>['auth']], function () {
 //Project
 
 Route::get('project/my-project',                        'ProjectController@myproject')->name('project.myproject');
+Route::post('project/my-project/deleteproject/{id}',                        'ProjectController@deleteproject')->name('project.deleteproject');
 Route::post('project/my-project',                        'ProjectController@myprojectstore')->name('project.myproject.store');
 Route::post('project/problem/submit/{id}',                        'ProjectController@problemsubmit')->name('project.problem.submit');
 Route::post('project/my-project/paingain/{id}',                        'ProjectController@paingain')->name('project.myproject.paingain');
@@ -49,7 +50,10 @@ Route::post('project/my-project/dasarimplementasi/{id}',                        
 Route::post('project/my-project/sosialisasi/{id}',                        'ProjectController@sosialisasi')->name('project.myproject.sosialisasi');
 Route::post('project/my-project/impact/{id}',                        'ProjectController@impact')->name('project.myproject.impact');
 Route::get('project/my-project/detail/{id}',                        'ProjectController@myprojectdetail')->name('project.myprojectdetail');
-
+Route::post('add-project-member/{id}','ProjectController@addMemberProject');
+Route::post('update-project-member/{id}','ProjectController@updateMemberProject');
+Route::post('project/updateinfo/{id}',   'ProjectController@projectmanagementeditone')->middleware('auth')->name('project.updateinfo');
+Route::post('project/problemupdate/{id}','ProjectController@problemupdate');
 
 Route::get('knowledge',                        'KnowledgeController@knowledge')->name('knowledge');
 Route::get('knowledge/problem/{id}',                        'KnowledgeController@problem')->name('knowledge.problem');

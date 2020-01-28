@@ -91,8 +91,7 @@
                     <div class="row clearfix">
                         <div class="col-lg-12 col-md-12">
                             <div class="card">
-                              @if($project->project_owner == Auth::user()->id)
-                              <form method="post" action="">
+                              <form method="post" action="{{route('project.updateinfo', $project->id)}}">
                                 @csrf
                                 <div class="body">
                                     <div class="form-group">
@@ -123,41 +122,22 @@
                                     <h6 class="text-success">Unit</h6>
                                         <div class="form-group">
                                             <div class="input-group demo--area">
-                                            <input type="text" name="project_tags" class="form-control"  value="{{$project->unit->unit_name}}" required disabled>
+                                              <select name="unit_id" class="select form-control" required>
+
+                                                @foreach($unit as $item)
+                                                <option value="{{$item->id}}" <?php if ($item->id == $project->unit_id): ?>
+                                                  selected
+                                                <?php endif; ?>>{{$item->unit_name}}</option>
+                                                @endforeach
+                                              </select>
+
                                             </div>
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary"> Edit Project</button>
                                 </div>
                               </form>
-                              @else
-                                <div class="body">
-                                    <div class="form-group">
-                                        <h6 class="text-success">Project Name</h6>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                              {{$project->project_name}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <h6 class="text-success">Project Description</h6>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                            {{$project->project_description}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                    <h6 class="text-success">Project Tags</h6>
-                                        <div class="form-group">
-                                            <div class="input-group demo-tagsinput-area">
-                                            {{$project->project_tags}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                              @endif
+
                             </div>
                         </div>
                     </div>
@@ -181,7 +161,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                             </div>
                                             <div class="modal-body pricing_page text-justify pt-4 mb-4">
-                                              <form  action="{{url('add-project-member/'.$project->project_id)}}" method="post">
+                                              <form  action="{{url('add-project-member/'.$project->id)}}" method="post">
                                                 @csrf
                                                 <div class="row clearfix">
                                                     <div class="col-12">
@@ -338,7 +318,7 @@
                                                                 </div>
                                                                 <div class="modal-body pricing_page text-justify pt-4 mb-4">
                                                                   <form class="" action="{{url('update-project-member/'.$item->id)}}" method="post">
-                                                                    <input type="hidden" value="{{$project->project_id}}" name="project_id">
+                                                                    <input type="hidden" value="{{$project->id}}" name="project_id">
                                                                     @csrf
                                                                     <div class="row clearfix">
                                                                         <div class="col-12">
@@ -472,9 +452,23 @@
                                         <button type="submit" class="btn btn-primary fa fa-paper-plane"> Submit Problem</button>
                                     </form>
                                     @else
-                                      <label>Problem : {{$project->problem->problem}}</label><br>
-                                      <label>Problem Background</label><br>
-                                      <p>{!!$project->problem->background!!}</p>
+                                    <form id="basic-form" action="{{url('project/problemupdate',$project->id)}}" method="post" novalidate>
+                                    {{ csrf_field() }}
+                                        <h6 class="text-success">Problem *</h6>
+                                        <div class="form-group">
+                                            <textarea name="problem" class="form-control" rows="8" cols="80">{{$project->problem->problem}}</textarea>
+                                        </div>
+                                        <br>
+                                        <h6 class="text-success">Problem Background *</h6>
+                                        <div class="form-group">
+                                            <textarea class="form-control ckeditor" id="ckeditor" name="background">
+                                              <p>{!!$project->problem->background!!}</p>
+                                            </textarea>
+                                        </div>
+                                        <br>
+                                        <button type="submit" class="btn btn-primary fa fa-paper-plane"> Submit Problem</button>
+                                    </form>
+
                                     @endif
                                   </div>
                                     <div class="table-responsive">
@@ -494,10 +488,10 @@
 
                                   <div class="body">
                                     <ul class="nav nav-tabs">
-                                        <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#first">Pain & Gain</a></li>
+                                        <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#first">Pain & Gain @if($project->paingain !== null) <i class="text-green fa fa-check"></i> @endif</a> </li>
 
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Third">Golden Circle & Unique Value</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Forth">Summary</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Third">Golden Circle & Unique Value @if($project->goldencircle !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Forth">Summary @if($project->summary !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
                                     </ul>
                                       <div class="tab-content"  id="wizard_horizontal">
                                         <div class="tab-pane show vivify fadeIn active" id="first">
@@ -507,18 +501,18 @@
                                             <form  class="col-lg-12" action="{{route('project.myproject.paingain',$project->id)}}" method="post">
                                               @csrf
                                               <div class="col-lg-6 text-center mb-3" style="float:left">
-                                                <b class="text-green">Pain</b>
+                                                <b class="text-red">Pain</b>
                                                 <div class="input-group">
 
-                                                  <textarea name="pain" class="form-control" rows="8" cols="80">@if($project->paingain !== null) {{$project->paingain->pain}} @endif</textarea>
+                                                  <textarea name="pain" class="form-control" rows="8" cols="80" placeholder="Tuliskan daftar hal-hal yang menyulitkan user saat ini dan menghambat mereka dalam meraih tujuannya.">@if($project->paingain !== null) {{$project->paingain->pain}} @endif</textarea>
                                                 </div>
 
                                               </div>
                                               <div class="col-lg-6 text-center mb-3" style="float:left">
-                                                <b class="text-red">Gain</b>
+                                                <b class="text-green">Gain</b>
                                                 <div class="input-group">
 
-                                                  <textarea name="gain" class="form-control" rows="8" cols="80">@if($project->paingain !== null) {{$project->paingain->gain}} @endif</textarea>
+                                                  <textarea name="gain" class="form-control" rows="8" cols="80" placeholder="Tuliskan hal-hal yang akan membuat user senang dan membuat usaha mereka lebih mudah untuk meraih tujuannya.">@if($project->paingain !== null) {{$project->paingain->gain}} @endif</textarea>
                                                 </div>
 
                                               </div>
@@ -623,8 +617,8 @@
 
                                 <div class="body">
                                   <ul class="nav nav-tabs">
-                                      <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#firstd">Product Development</a></li>
-                                      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#secondd">Pilot Project</a></li>
+                                      <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#firstd">Product Development @if($project->productdevelopment !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
+                                      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#secondd">Pilot Project @if($project->pilotproject !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
                                   </ul>
                                     <div class="tab-content"  id="wizard_horizontal">
                                       <div class="tab-pane show vivify fadeIn active" id="firstd">\
@@ -642,10 +636,10 @@
                                               <b>Upload Mockup/Prototype/Poster</b><br>
                                               @if($project->productdevelopment !== null)
                                                 <a href="{{asset('file/mockup/'.$project->productdevelopment->mockup_file)}}" target="_blank">File Mockup</a><br>
-                                                <input type="file" name="mockup_file" value="">
+                                                <input type="file" name="mockup_file[]" value="" multiple>
                                               @else
                                               <div class="input-group">
-                                                <input type="file" name="mockup_file" value="">
+                                                <input type="file" name="mockup_file[]" value="" multiple>
                                               </div>
                                               @endif
                                             </div>
@@ -653,10 +647,10 @@
                                               <b>Upload Dokumentasi</b><br>
                                               @if($project->productdevelopment !== null)
                                                 <a href="{{asset('file/doc/'.$project->productdevelopment->doc_file)}}" target="_blank">File Dokumentasi</a><br>
-                                                <input type="file" name="doc_file" value="">
+                                                <input type="file" name="doc_file[]" value="" multiple>
                                               @else
                                               <div class="input-group">
-                                                <input type="file" name="doc_file" value="">
+                                                <input type="file" name="doc_file[]" value="" multiple>
                                               </div>
                                               @endif
                                             </div>
@@ -698,9 +692,9 @@
                                               @if($project->pilotproject !== null)
 
                                                 <a href="{{asset('file/doc/'.$project->pilotproject)}}">Dokumentasi</a>
-                                                <input type="file" name="doc_file" value="">
+                                                <input type="file" name="doc_file[]" value="" multiple>
                                               @else
-                                                <input type="file" name="doc_file" value="">
+                                                <input type="file" name="doc_file[]" value="" multiple>
                                               @endif
                                             </div>
                                             <!-- <div class="col-lg-12"> -->
@@ -730,9 +724,9 @@
 
                                   <div class="body">
                                     <ul class="nav nav-tabs">
-                                        <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#firsti">Dasar Implementasi</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#secondi">Sosialisasi & Dokumentasi</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Thirdi">Impact</a></li>
+                                        <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#firsti">Dasar Implementasi @if($project->dasarimplementasi !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#secondi">Sosialisasi & Dokumentasi @if($project->sosialisasi !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Thirdi">Impact @if($project->impact !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
                                     </ul>
                                       <div class="tab-content"  id="wizard_horizontal">
                                         <div class="tab-pane show vivify fadeIn active" id="firsti">
@@ -784,15 +778,15 @@
                                                 @csrf
                                                 <b>Judul</b>
                                                 <div class="input-group mb-3">
-                                                  <input type="text" class="form-control" name="judul" value="">
+                                                  <input type="text" class="form-control" name="judul" value="@if($project->sosialisasi !== null ) {{$project->sosialisasi->judul}} @endif">
                                                 </div>
                                                 <b>Location</b>
                                                 <div class="input-group mb-3">
-                                                  <input type="text" class="form-control" name="lokasi" value="">
+                                                  <input type="text" class="form-control" name="lokasi" value="@if($project->sosialisasi !== null ) {{$project->sosialisasi->lokasi}} @endif">
                                                 </div>
                                                 <b>Posts</b>
                                                 <div class="input-group mb-3">
-                                                  <textarea name="post" class="form-control" rows="8" cols="80"></textarea>
+                                                  <textarea name="post" class="form-control" rows="8" cols="80">@if($project->sosialisasi !== null ) {{$project->sosialisasi->post}} @endif</textarea>
                                                 </div>
                                                 <b>Upload Image</b>
                                                 <div class="input-group mb-3">
@@ -800,6 +794,19 @@
                                                 </div>
                                                 <button type="submit" class="btn btn-primary"> Save</button>
                                               </form>
+                                              <div class="col-md-12">
+                                                <div class="row clearfix">
+                                                  <?php if ($project->sosialisasi !== null): ?>
+                                                    @foreach($project->sosialisasi->image as $image)
+                                                    <div class="col-md-2">
+                                                      <img src="{{asset('file/doc/'.$image->image)}}" alt="" style="width:100%">
+                                                    </div>
+                                                    @endforeach
+                                                  <?php endif; ?>
+                                                </div>
+
+
+                                              </div>
                                             </div>
 
 

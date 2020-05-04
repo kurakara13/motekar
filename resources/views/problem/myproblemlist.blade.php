@@ -89,14 +89,15 @@
                                   @endif
                                   @if($dp->status == '1')
                                   Need Team Project
+                                  @else
+                                    {{$dp->status}}
                                    @endif
                               </td>
                               <td class="text-center">
                               <a href="{{ route('problem.problemdetail' , $dp->problem_id)}}" class="btn btn-outline-primary fa fa-search"> See Detail </a>
-                              <br><br>
-                              @if($dp->status == 'Need Team Project')
                               <a href="deleteproblem/{{ $dp->problem_id }}" class="btn btn-outline-danger fa fa-close" data-toggle="modal" data-target="#exampleModalCenter{{ $dp->problem_id }}"> Delete </a>
-                              @endif
+                              <br><br>
+
                               </td>
 
                               <!-- Modal Delete Problem -->

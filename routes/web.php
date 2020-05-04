@@ -54,6 +54,9 @@ Route::post('add-project-member/{id}','ProjectController@addMemberProject');
 Route::post('update-project-member/{id}','ProjectController@updateMemberProject');
 Route::post('project/updateinfo/{id}',   'ProjectController@projectmanagementeditone')->middleware('auth')->name('project.updateinfo');
 Route::post('project/problemupdate/{id}','ProjectController@problemupdate');
+Route::post('delete-project-member/{id}','ProjectController@deleteMemberProject');
+Route::post('delete-sosialisasi/{id}','ProjectController@deletesosialisasi');
+
 
 Route::get('knowledge',                        'KnowledgeController@knowledge')->name('knowledge');
 Route::get('knowledge/problem/{id}',                        'KnowledgeController@problem')->name('knowledge.problem');
@@ -68,7 +71,7 @@ Route::get('inovator/list',                'InovatorController@index')->name('in
 Route::get('profile','HomeController@profile')->name('profile');
 Route::post('profile','HomeController@update_profile')->name('update.profile');
 Route::post('profile/password','HomeController@update_password')->name('update.password');
-
+Route::post('post','HomeController@post')->name('post');
 Route::post('comment/{id}','SosialisasiController@comment')->name('comment.store');
 Route::post('like/{id}','SosialisasiController@like')->name('like.store');
 });

@@ -32,18 +32,60 @@
               </div>
             </div>
           </div>
-          @foreach($project as $item)
-          @if($item->sosialisasi)
+          <div class="card mt-3 pt-1">
+            <div class="body">
+              <div class="row slider-text">
+                <div class="col-md-12 ftco-animate ">
+                  <h6>Post</h6>
+                  <form class="" action="{{route('post')}}" enctype="multipart/form-data" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" class="form-control mt-1" name="judul" placeholder="Judul" value="" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Location</label>
+                      <input type="text" class="form-control mt-1" name="location" placeholder="Location" value="" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Tanggal Event</label>
+                      <input type="date" class="form-control mt-1" name="tanggal_event" placeholder="Tanggal Event" value="" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Image</label>
+                      <div class="custom-file ">
+                        <input type="file" class="custom-file-input" id="customFile" name="file[]">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label>Deskripsi</label>
+                      <textarea name="post" class="form-control mt-1" rows="8" cols="80" required></textarea>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-danger mt-1" name="button">Kirim</button>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          @foreach($sosialisasis as $sosialisasi)
             <div class="card mt-3">
 
                   <div class="body">
-                    <h5 class="card-title">{{$item->sosialisasi->judul}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{$item->sosialisasi->created_at}}</h6>
+                    <span class="card-title"><h5>{{$sosialisasi->judul}} </h5></span>
+                    <p class="card-subtitle mb-2 text-muted">Posted by {{$sosialisasi->user->name}}</p>
+                    <p class="card-subtitle mb-2 text-muted">{{$sosialisasi->lokasi}} @if($sosialisasi->lokasi !== null) , @endif @if($sosialisasi->tanggal_event !== null) {{date_format(date_create($sosialisasi->tanggal_event),'d M Y')}} @else  {{date_format(date_create($sosialisasi->created_at),'d M Y')}} @endif</p>
                     <div class="mb-3">
-                      <p>{{$item->sosialisasi->post}}</p>
-                      @foreach($item->sosialisasi->image as $image)
+                      <p>{{$sosialisasi->post}}</p>
+                      @foreach($sosialisasi->image as $image)
 
-                        <img src="{{asset('file/doc/'.$image->image)}}" style="width:100px" alt="">
+                        <img src="{{asset('file/doc/'.$image->image)}}" style="width:300px" alt="">
                       @endforeach
                     </div>
 
@@ -51,19 +93,19 @@
                       <div class="row clearfix">
                         <div class="col-md-6">
                           <i class="fa fa-love"></i>
-                          <span onclick="like('{{$item->sosialisasi->id}}',$(this))" cliktwice="true" style="cursor:pointer" disabled>
-                            <i id="like-{{$item->sosialisasi->id}}" class="fa  fa-heart {{in_array(Auth::user()->id, $item->sosialisasi->like->pluck('user_id')->toArray()) ? 'like' : 'dislike'}}"></i>
-                            Like (<span id="like-count-{{$item->sosialisasi->id}}">{{count($item->sosialisasi->like)}}</span>)
+                          <span onclick="like('{{$sosialisasi->id}}',$(this))" cliktwice="true" style="cursor:pointer" disabled>
+                            <i id="like-{{$sosialisasi->id}}" class="fa  fa-heart {{in_array(Auth::user()->id, $sosialisasi->like->pluck('user_id')->toArray()) ? 'like' : 'dislike'}}"></i>
+                            Like (<span id="like-count-{{$sosialisasi->id}}">{{count($sosialisasi->like)}}</span>)
                           </span>
                         </div>
                         <div class="col-md-6">
-                          <i class="fa fa-comments-o"> Comment</i> ({{count($item->sosialisasi->comment)}})
+                          <i class="fa fa-comments-o"> Comment</i> ({{count($sosialisasi->comment)}})
                         </div>
                       </div>
                       <br>
                       <ul class="timeline"  style="background:#fff;border-top:1px solid; border-color:#e1e8ed;padding-top:20px !important">
-                        @if(count($item->sosialisasi->comment) != 0)
-                          @foreach($item->sosialisasi->comment as $cmm)
+                        @if(count($sosialisasi->comment) != 0)
+                          @foreach($sosialisasi->comment as $cmm)
                           <li class="timeline-item">
                               <div class="timeline-marker"></div>
                               <div class="timeline-content">
@@ -91,7 +133,7 @@
                       <!-- comment -->
                       <br>
                       <h5 class="card-title">Submit Your Comment</h5>
-                      <form action="{{route('comment.store', $item->sosialisasi->id)}}" method="post">
+                      <form action="{{route('comment.store', $sosialisasi->id)}}" method="post">
                         @csrf
                         <div class="row clearfix">
                           <div class="col-12">
@@ -107,7 +149,6 @@
                     </div>
                   </div>
                 </div>
-          @endif
 
           @endforeach
         </div>
@@ -133,6 +174,52 @@
                     <div class="ml-4">
                         <span>Project</span>
                         <h4 class="mb-0 font-weight-medium">{{count($project)}}</h4>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="body">
+              <div class="d-flex align-items-center">
+                    <div class="ml-4">
+                        <span>Most Liked</span>
+                        @foreach($mostlike as $like)
+                        <div class="body">
+                          <h6 class="mb-0 font-weight-medium">{{$like->judul}}</h6>
+                          <p class="text-primary">{{$like->mostlike}} Like<p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="body">
+              <div class="d-flex align-items-center">
+                    <div class="ml-4">
+                        <span>Most Commented</span>
+                        @foreach($mostcomment as $comment)
+                        <div class="body">
+                          <p class="mb-0 font-weight-medium">{{$comment->judul}}</p>
+                          <p class="text-primary">{{$like->mostcomment}} Like<p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="body">
+              <div class="d-flex align-items-center">
+                    <div class="ml-4">
+                        <span>Top 5 Inovator</span>
+                        @foreach($bestuser as $user)
+                        <div class="body">
+                          <p class="mb-0 font-weight-medium text-red">{{$user->name}}</p>
+                          <p >Project Involved : {{$user->projects_count}}<p>
+                          <p>Problem Submited : {{$user->problem_count}}</p>
+                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -189,5 +276,12 @@
       });
     }
   }
+</script>
+<script>
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
 </script>
 @stop

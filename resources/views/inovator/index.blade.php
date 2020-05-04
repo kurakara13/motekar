@@ -47,7 +47,7 @@
                               <td class="text-center">{{$pp->posisi}}</td>
                               <td class="text-center">{{$pp->unit}}</td>
                               <td class="text-center">{{$pp->problem_count}}</td>
-                              <td class="text-center">0</td>
+                              <td class="text-center">{{$pp->projects_count}}</td>
                           </tr>
                       @endforeach
                       </tbody>

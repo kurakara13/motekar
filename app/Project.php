@@ -52,7 +52,7 @@ class Project extends Model
   }
   public function sosialisasi()
   {
-    return $this->hasOne('App\Sosialisasi','project_id');
+    return $this->hasMany('App\Sosialisasi','project_id');
   }
   public function impact()
   {

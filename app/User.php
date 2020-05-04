@@ -42,4 +42,12 @@ class User extends Authenticatable
 
       return $this->hasMany('App\Problem', 'user_id');
     }
+    public function projects(){
+      return $this->hasMany('App\Member', 'user_id');
+      // return $this->hasMany('App\Project', 'project_owner');
+    }
+    public function members()
+    {
+      return $this->hasMany('App\Member', 'user_id');
+    }
 }

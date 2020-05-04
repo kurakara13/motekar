@@ -8,7 +8,7 @@
     <div class="block-header">
         <div class="row clearfix">
             <div class="col-md-6 col-sm-12">
-                <h1>Problem Pool</h1>
+                <h1>Knowledge</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href=""><i class="icon-home"></i></a></li>
@@ -55,6 +55,53 @@
               Please check the form below for errors
           </div>
           @endif
+          <div class="row clearfix">
+            <div class="col-6 col-md-4 col-xl-2">
+                <div class="card">
+                    <div class="body ribbon">
+                        <div class="ribbon-box green">{{$projects->count()}}</div>
+                        <a href="#" class="my_sort_cut text-muted">
+                          <i class="text-green"></i>
+                            <b class="text-green">Total Project</b>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <div class="card">
+                    <div class="body ribbon">
+                        <div class="ribbon-box cyan">{{$projects->where('project_status', 'Idea Generation')->count()}}</div>
+                        <a href="#" class="my_sort_cut text-muted">
+                            <i class="text-cyan"></i>
+                            <b class="text-cyan">Idea Generation</b>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <div class="card">
+                    <div class="body ribbon">
+                        <div class="ribbon-box orange">{{$projects->where('project_status', 'On Development')->count()}}</div>
+                        <a href="#" class="my_sort_cut text-muted">
+                            <i class="text-orange"></i>
+                            <b class="">On Development</b>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <div class="card">
+                    <div class="body ribbon">
+                        <div class="ribbon-box indigo">{{$projects->where('project_status', 'Implementation')->count()}}</div>
+                        <a href="#" class="my_sort_cut text-muted">
+                            <i class="text-cyan"></i>
+                            <b class="text-indigo">Implementation</b>
+                        </a>
+                    </div>
+                </div>
+            </div>
+          </div>
+
               <div class="card">
 
                   <div class="text-right">

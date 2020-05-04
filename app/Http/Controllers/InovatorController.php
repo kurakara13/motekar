@@ -16,7 +16,7 @@ use App\Notifications\Notification;
 class InovatorController extends BaseController
 {
     function index(){
-      $inovator = User::withCount('problem')->get();
+      $inovator = User::withCount('problem','projects')->get();
 
       return view('inovator.index', compact('inovator'));
     }

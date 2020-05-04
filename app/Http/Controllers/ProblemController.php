@@ -77,6 +77,13 @@ class ProblemController extends BaseController
     public function deleteproblem($problem_id)
     {
         // menghapus data problem berdasarkan problem_id yang dipilih
+        $project = Project::where('problem_id',$problem_id)->first();
+        if ($project !== null) {
+          // code...
+          $project->problem_id = null;
+          $project->save();
+        }
+
         Problem::find($problem_id)->delete();
 
         // alihkan halaman ke halaman my problem list

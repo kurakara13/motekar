@@ -55,6 +55,8 @@
                               <td class="text-center"><span class="badge badge-warning text-uppercase">On Development</span></td>
                               @elseif($pp->status == '0')
                               <td class="text-center"><span class="badge badge-success text-uppercase">Solved</span></td>
+                              @else
+                              <td class="text-center"><span class="badge badge-success text-uppercase">{{$pp->status}}</span></td>
                               @endif
                               <!-- action -->
                               <td class="text-center">

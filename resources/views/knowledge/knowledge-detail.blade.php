@@ -80,9 +80,9 @@
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Info-withicon"><i class="fa fa-external-link"></i> Publication</a></li> -->
 
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#ToDoList-withicon"><i class="fa fa-list-ol"></i> Problem @if($project->problem_id !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Backlog-withicon"><i class="fa fa-bars"></i> Idea & Solution @if($project->summary !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Sprints-withicon" ><i class="fa fa-tasks"></i> Development @if($project->pilotproject !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab"href="#Analysis-withicon" ><i class="fa fa-bar-chart-o"></i> Implementation @if($project->sosialisasi !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Backlog-withicon" @if($project->problem_id !== null) disabled @endif><i class="fa fa-bars"></i> Idea & Solution @if($project->summary !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Sprints-withicon" @if($project->summary !== null) disabled @endif><i class="fa fa-tasks"></i> Development @if($project->pilotproject !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab"href="#Analysis-withicon" Development @if($project->pilotproject !== null) disabled @endif><i class="fa fa-bar-chart-o"></i> Implementation @if(count($project->sosialisasi) > 0)<i class="text-green fa fa-check"></i> @endif</a></li>
 
                 </ul>
                 <div class="tab-content">
@@ -108,7 +108,7 @@
                                         <h6 class="text-success">Project Description</h6>
                                         <div class="form-group">
                                             <div class="input-group">
-                                            {{$project->project_description}}
+                                            {!!$project->project_description!!}
                                             </div>
                                         </div>
                                     </div>
@@ -392,9 +392,9 @@
                                 <div class="card">
                                   <div class="body">
 
-                                      <label>Problem : {{$project->problem->problem}}</label><br>
+                                      <label>Problem :<br> @if($project->problem !== null) {{$project->problem->problem}} @endif</label><br>
                                       <label>Problem Background</label><br>
-                                      <p>{!!$project->problem->background!!}</p>
+                                      <p>@if($project->problem !== null) {!!$project->problem->background!!} @endif</p>
                                   </div>
                                     <div class="table-responsive">
 
@@ -428,7 +428,7 @@
                                               <div class="col-lg-6 text-center mb-3" style="float:left">
                                                 <b class="text-red">Pain</b>
                                                 <div class="input-group text-center">
-                                                  @if($project->paingain !== null) {{$project->paingain->pain}} @endif
+                                                  @if($project->paingain !== null) {!!$project->paingain->pain!!} @endif
 
                                                 </div>
 
@@ -436,11 +436,11 @@
                                               <div class="col-lg-6 text-center mb-3" style="float:left">
                                                 <b class="text-green">Gain</b>
                                                 <div class="input-group">
-                                                  @if($project->paingain !== null) {{$project->paingain->gain}} @endif
+                                                  @if($project->paingain !== null) {!!$project->paingain->gain!!} @endif
                                                 </div>
 
                                               </div>
-                                              <button type="submit" class="btn btn-primary"> Save</button>
+                                              <!-- <button type="submit" class="btn btn-primary"> Save</button> -->
                                             </form>
                                           </div>
 
@@ -462,7 +462,7 @@
                                               <div class="col-sm-6 text-center" style="float:left">
                                                   <input type="file" name="file_upload" value="">
                                               </div>
-                                              <button type="submit" class="btn btn-primary"> Save</button>
+                                              <!-- <button type="submit" class="btn btn-primary"> Save</button> -->
                                               </form>
                                             </div>
 
@@ -510,7 +510,7 @@
                                           <div class="row clearfix">
                                             <div class="col-md-12 ">
                                               <div class="input-group mb-3">
-                                                @if($project->summary !== null) {{$project->summary->summary}} @endif
+                                                @if($project->summary !== null) {!!$project->summary->summary!!} @endif
 
                                               </div>
                                             </div>
@@ -551,7 +551,7 @@
                                             <div class="col-lg-12  mb-3" style="float:left">
                                               <b class="">Development Story</b>
                                               <div class="input-group">
-                                              @if($project->productdevelopment !== null){{$project->productdevelopment->development_story}} @endif
+                                              @if($project->productdevelopment !== null){!!$project->productdevelopment->development_story!!} @endif
                                               </div>
                                             </div>
                                             <div class="col-lg-12  mb-3" style="float:left">
@@ -579,7 +579,7 @@
                                               </div>
                                               @endif
                                             </div>
-                                            <button type="submit" class="btn btn-primary"> Save</button>
+                                            <!-- <button type="submit" class="btn btn-primary"> Save</button> -->
                                           </form>
                                         </div>
 
@@ -605,7 +605,7 @@
                                               <div class="col-lg-12  mb-3" style="float:left">
                                                 <b class="">Development Story</b>
                                                 <div class="input-group">
-                                                  @if($project->pilotproject !== null) {{$project->pilotproject->development_story}} @endif
+                                                  @if($project->pilotproject !== null) {!!$project->pilotproject->development_story!!} @endif
 
                                                 </div>
 
@@ -621,7 +621,7 @@
                                               @endif
                                             </div>
                                             <!-- <div class="col-lg-12"> -->
-                                              <button type="submit" class="btn btn-primary"> Save</button>
+                                              <!-- <button type="submit" class="btn btn-primary"> Save</button> -->
                                             <!-- </div> -->
                                             </form>
                                           </div>
@@ -683,43 +683,31 @@
 
                                           <section>
                                             <div class="row clearfix">
-                                              <form class="col-md-12" action="{{route('project.myproject.sosialisasi',$project->id)}}" method="post" enctype="multipart/form-data">
-                                                @csrf
-                                                <b>Judul</b>
-                                                <div class="input-group mb-3">
-                                                  <?php if ($project->sosialisasi !== null): ?>
-                                                    {{$project->sosialisasi->judul}}
-                                                  <?php endif; ?>
+                                              <div class="col-md-12">
+                                                <div class="row clearfix">
+                                                  @foreach($project->sosialisasi as $sosialisasi)
+                                                  <div class="col-md-12  body mt-3">
+                                                    <div class="" style="">
+                                                      <div class="pull-right" style="width:100%;text-align:right">
+                                                        <!-- <a href="#" data-type="confirm" data-toggle="modal" data-target=".ondelete-sosis{{$sosialisasi->id}}">Delete</a> -->
+                                                      </div>
+                                                      <h5 class="card-title">{{$sosialisasi->judul}}</h5>
+                                                      <h6 class="card-subtitle mb-2 text-muted">{{$sosialisasi->created_at}}</h6>
+                                                      <div class="mb-3">
+                                                        <p>{{$sosialisasi->post}}</p>
+                                                        @foreach($sosialisasi->image as $image)
 
+                                                          <img src="{{asset('file/doc/'.$image->image)}}" style="width:100px" alt="">
+                                                        @endforeach
+                                                      </div>
+                                                    </div>
+                                                  </div>
 
+                                                  @endforeach
                                                 </div>
-                                                <b>Location</b>
-                                                <div class="input-group mb-3">
-                                                  <?php if ($project->sosialisasi !== null): ?>
-                                                    {{$project->sosialisasi->lokasi}}
-                                                  <?php endif; ?>
 
 
-                                                </div>
-                                                <b>Posts</b>
-                                                <div class="input-group mb-3">
-                                                  <?php if ($project->sosialisasi !== null): ?>
-                                                    {{$project->sosialisasi->post}}
-                                                  <?php endif; ?>
-
-
-                                                </div>
-                                                <b>Image</b>
-                                                <div class="input-group mb-3">
-                                                  <?php if ($project->sosialisasi !== null): ?>
-                                                    {{$project->sosialisasi->post}}
-                                                    @foreach($project->sosialisasi->image as $image)
-                                                      <img src="{{asset('file/doc/',$project->sosialisasi->image->image)}}" alt="">
-                                                    @endforeach
-                                                  <?php endif; ?>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary"> Save</button>
-                                              </form>
+                                              </div>
                                             </div>
 
 
@@ -744,7 +732,7 @@
                                               @endforeach
                                             </tbody>
                                           </table>
-                                          <button type="button" data-toggle="modal" data-target=".new-project-modal" class="btn btn-primary" name="button">Add Impact</button>
+                                          <!-- <button type="button" data-toggle="modal" data-target=".new-project-modal" class="btn btn-primary" name="button">Add Impact</button> -->
 
 
                                         </div>
@@ -758,7 +746,7 @@
                                                 <textarea name="name" class="form-control" rows="8" cols="120" placeholder="Ceritakan project yang akan anda kerjakan"></textarea>
 
                                               </div>
-                                              <button type="submit" name="button" class="btn btn-primary">Save</button>
+                                              <!-- <button type="submit" name="button" class="btn btn-primary">Save</button> -->
                                             </div>
                                           </div>
 

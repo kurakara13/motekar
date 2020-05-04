@@ -31,7 +31,7 @@
                                             <div class="input-group mb-3">
                                             <select class="form-control" name="status">
                                               <option value="Define Problem">Define Problem</option>
-                                              <option value="Ideation">Ideation</option>
+                                              <option value="Idea Generation">Idea Generation</option>
                                               <option value="On Development">On Development</option>
                                               <option value="Implementation">Implementation</option>
                                             </select>
@@ -81,7 +81,7 @@
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#ToDoList-withicon"><i class="fa fa-list-ol"></i> Problem @if($project->problem_id !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Backlog-withicon"><i class="fa fa-bars"></i> Idea & Solution @if($project->summary !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
                     <li class="nav-item"><a class="nav-link text-info" data-toggle="tab" href="#Sprints-withicon" ><i class="fa fa-tasks"></i> Development @if($project->pilotproject !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
-                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab"href="#Analysis-withicon" ><i class="fa fa-bar-chart-o"></i> Implementation @if($project->sosialisasi !== null)<i class="text-green fa fa-check"></i> @endif</a></li>
+                    <li class="nav-item"><a class="nav-link text-info" data-toggle="tab"href="#Analysis-withicon" ><i class="fa fa-bar-chart-o"></i> Implementation @if(count($project->sosialisasi) > 0)<i class="text-green fa fa-check"></i> @endif</a></li>
 
                 </ul>
                 <div class="tab-content">
@@ -170,7 +170,7 @@
                                                                 <div class="form-group col-lg-12 col-md-12">
                                                                     <b>Member Name</b>
                                                                     <div class="input-group mb-3">
-                                                                    <select class="select form-control" name="user_id">
+                                                                    <select id="select"class="select form-control" name="user_id">
                                                                       @foreach($user as $users)
                                                                       <option value="{{$users->id}}">{{$users->name}}</option>
                                                                       @endforeach
@@ -431,7 +431,7 @@
                                         <div class="form-group">
                                         <h6 class="text-success">Asal ditemukanannya masalah *</h6>
                                             <div class="form-group">
-                                                <select id="food" name="asal_masalah[]" class="multiselect multiselect-custom" multiple="multiple" data-parsley-required data-parsley-trigger-after-failure="change" data-parsley-errors-container="#error-multiselect">
+                                                <select id="food" name="asal_masalah[]" class="multiselect multiselect-custom" required multiple="multiple" data-parsley-required data-parsley-trigger-after-failure="change" data-parsley-errors-container="#error-multiselect">
                                                     <option value="Hasil Review">Hasil Review</option>
                                                     <option value="Suara Pelanggan">Suara Pelanggan</option>
                                                     <option value="Hasil Audit & Assessment">Hasil Audit & Assessment</option>
@@ -445,7 +445,7 @@
                                         <br>
                                         <h6 class="text-success">Problem Background *</h6>
                                         <div class="form-group">
-                                            <textarea class="form-control ckeditor" id="ckeditor" name="background">
+                                            <textarea class="form-control summernote"  name="background" required>
                                             </textarea>
                                         </div>
                                         <br>
@@ -456,12 +456,12 @@
                                     {{ csrf_field() }}
                                         <h6 class="text-success">Problem *</h6>
                                         <div class="form-group">
-                                            <textarea name="problem" class="form-control" rows="8" cols="80">{{$project->problem->problem}}</textarea>
+                                            <textarea name="problem" class="form-control" rows="8" cols="80" required>{{$project->problem->problem}}</textarea>
                                         </div>
                                         <br>
                                         <h6 class="text-success">Problem Background *</h6>
                                         <div class="form-group">
-                                            <textarea class="form-control ckeditor" id="ckeditor" name="background">
+                                            <textarea class="form-control summernote" name="background" required>
                                               <p>{!!$project->problem->background!!}</p>
                                             </textarea>
                                         </div>
@@ -494,25 +494,24 @@
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Forth">Summary @if($project->summary !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
                                     </ul>
                                       <div class="tab-content"  id="wizard_horizontal">
-                                        <div class="tab-pane show vivify fadeIn active" id="first">
-                                          <h2>Pain & Gain</h2>
+                                        <div class="tab-pane show vivify fadeIn active" id="first">\
                                           <div class="row clearfix">
 
                                             <form  class="col-lg-12" action="{{route('project.myproject.paingain',$project->id)}}" method="post">
                                               @csrf
-                                              <div class="col-lg-6 text-center mb-3" style="float:left">
-                                                <b class="text-red">Pain</b>
+                                              <div class="col-lg-6  mb-3" style="float:left">
+                                                <b class="text-red text-center">Pain</b>
                                                 <div class="input-group">
 
-                                                  <textarea name="pain" class="form-control" rows="8" cols="80" placeholder="Tuliskan daftar hal-hal yang menyulitkan user saat ini dan menghambat mereka dalam meraih tujuannya.">@if($project->paingain !== null) {{$project->paingain->pain}} @endif</textarea>
+                                                  <textarea name="pain" class="form-control summernote" rows="8" cols="80" placeholder="Tuliskan daftar hal-hal yang menyulitkan user saat ini dan menghambat mereka dalam meraih tujuannya." required>@if($project->paingain !== null) {!!$project->paingain->pain!!} @endif</textarea>
                                                 </div>
 
                                               </div>
-                                              <div class="col-lg-6 text-center mb-3" style="float:left">
-                                                <b class="text-green">Gain</b>
+                                              <div class="col-lg-6  mb-3" style="float:left">
+                                                <b class="text-green text-center">Gain</b>
                                                 <div class="input-group">
 
-                                                  <textarea name="gain" class="form-control" rows="8" cols="80" placeholder="Tuliskan hal-hal yang akan membuat user senang dan membuat usaha mereka lebih mudah untuk meraih tujuannya.">@if($project->paingain !== null) {{$project->paingain->gain}} @endif</textarea>
+                                                  <textarea name="gain" class="form-control summernote" rows="8" cols="80" placeholder="Tuliskan hal-hal yang akan membuat user senang dan membuat usaha mereka lebih mudah untuk meraih tujuannya." required>@if($project->paingain !== null) {!!$project->paingain->gain!!} @endif</textarea>
                                                 </div>
 
                                               </div>
@@ -522,7 +521,6 @@
 
                                         </div>
                                         <div class="tab-pane show vivify fadeIn " id="second">
-                                          <h2>User Journey Map</h2>
                                           <section>
                                             <div class="row clearfix">
                                               <form class="col-md-12" action="{{route('project.myproject.userjourney',$project->id)}}" method="post" enctype="multipart/form-data">
@@ -538,7 +536,7 @@
                                               <div class="col-sm-6 text-center" style="float:left">
                                                   <input type="file" name="file_upload" value="">
                                               </div>
-                                              <button type="submit" class="btn btn-primary"> Save</button>
+                                              <button type="submit" class="btn btn-primary" @if($project->paingain === null) disabled @endif > Save</button>
                                               </form>
                                             </div>
 
@@ -546,7 +544,6 @@
                                           </section>
                                         </div>
                                         <div class="tab-pane show vivify fadeIn " id="Third">
-                                          <h2>Golden Circle & Unique Value</h2>
                                           <form class="" action="{{route('project.myproject.goldencircle',$project->id)}}" method="post">
                                             @csrf
 
@@ -573,7 +570,7 @@
                                               <div class="input-group">
                                                 <textarea name="unique_value" class="form-control" rows="4 " cols="80">@if($project->goldencircle !== null) {{$project->goldencircle->unique_value}} @endif</textarea>
                                               </div>
-                                              <button type="submit" name="button" class="btn btn-primary">Save</button>
+                                              <button type="submit" name="button" class="btn btn-primary" @if($project->paingain === null) disabled @endif>Save</button>
                                             </div>
 
                                           </div>
@@ -587,10 +584,10 @@
                                           <div class="row clearfix">
                                             <div class="col-md-12 ">
                                               <div class="input-group mb-3">
-                                                <textarea name="summary" class="form-control" rows="8" cols="120" placeholder="Ceritakan project yang akan anda kerjakan">@if($project->summary !== null) {{$project->summary->summary}} @endif</textarea>
+                                                <textarea name="summary" class="form-control summernote" id="" rows="8" cols="120" placeholder="Ceritakan project yang akan anda kerjakan">@if($project->summary !== null) {!!$project->summary->summary!!} @endif</textarea>
 
                                               </div>
-                                              <button type="submit" name="button" class="btn btn-primary">Save</button>
+                                              <button type="submit" name="button" class="btn btn-primary" @if($project->goldencircle === null) disabled @endif>Save</button>
                                             </div>
                                           </div>
 
@@ -724,9 +721,9 @@
 
                                   <div class="body">
                                     <ul class="nav nav-tabs">
-                                        <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#firsti">Dasar Implementasi @if($project->dasarimplementasi !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#secondi">Sosialisasi & Dokumentasi @if($project->sosialisasi !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Thirdi">Impact @if($project->impact !== null) <i class="text-green fa fa-check"></i> @endif</a></li>
+                                        <li class="nav-item"><a class="nav-link show active" data-toggle="tab" href="#firsti">Dasar Implementasi @if(count($project->dasarimplementasi) !== 0) <i class="text-green fa fa-check"></i> @endif</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#secondi">Sosialisasi & Dokumentasi @if(count($project->sosialisasi) !== 0)  <i class="text-green fa fa-check"></i> @endif</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Thirdi">Impact @if(count($project->impact) !== 0) <i class="text-green fa fa-check"></i> @endif</a></li>
                                     </ul>
                                       <div class="tab-content"  id="wizard_horizontal">
                                         <div class="tab-pane show vivify fadeIn active" id="firsti">
@@ -776,17 +773,21 @@
                                             <div class="row clearfix">
                                               <form class="col-md-12" action="{{route('project.myproject.sosialisasi',$project->id)}}" method="post" enctype="multipart/form-data">
                                                 @csrf
-                                                <b>Judul</b>
+                                                <b>Judul Event / Sosialisasi</b>
                                                 <div class="input-group mb-3">
-                                                  <input type="text" class="form-control" name="judul" value="@if($project->sosialisasi !== null ) {{$project->sosialisasi->judul}} @endif">
+                                                  <input type="text" class="form-control" name="judul" value="">
                                                 </div>
                                                 <b>Location</b>
                                                 <div class="input-group mb-3">
-                                                  <input type="text" class="form-control" name="lokasi" value="@if($project->sosialisasi !== null ) {{$project->sosialisasi->lokasi}} @endif">
+                                                  <input type="text" class="form-control" name="lokasi" value="">
+                                                </div>
+                                                <b>Tanggal Event</b>
+                                                <div class="input-group mb-3">
+                                                  <input type="date" class="form-control" name="tanggal" value="">
                                                 </div>
                                                 <b>Posts</b>
                                                 <div class="input-group mb-3">
-                                                  <textarea name="post" class="form-control" rows="8" cols="80">@if($project->sosialisasi !== null ) {{$project->sosialisasi->post}} @endif</textarea>
+                                                  <textarea name="post" class="form-control" rows="8" cols="80"></textarea>
                                                 </div>
                                                 <b>Upload Image</b>
                                                 <div class="input-group mb-3">
@@ -796,13 +797,25 @@
                                               </form>
                                               <div class="col-md-12">
                                                 <div class="row clearfix">
-                                                  <?php if ($project->sosialisasi !== null): ?>
-                                                    @foreach($project->sosialisasi->image as $image)
-                                                    <div class="col-md-2">
-                                                      <img src="{{asset('file/doc/'.$image->image)}}" alt="" style="width:100%">
+                                                  @foreach($project->sosialisasi as $sosialisasi)
+                                                  <div class="col-md-12  body mt-3">
+                                                    <div class="" style="">
+                                                      <div class="pull-right" style="width:100%;text-align:right">
+                                                        <a href="#" data-toggle="modal" data-target=".ondelete-sosis{{$sosialisasi->id}}">Delete</a>
+                                                      </div>
+                                                      <h5 class="card-title">{{$sosialisasi->judul}}</h5>
+                                                      <h6 class="card-subtitle mb-2 text-muted">{{$sosialisasi->created_at}}</h6>
+                                                      <div class="mb-3">
+                                                        <p>{{$sosialisasi->post}}</p>
+                                                        @foreach($sosialisasi->image as $image)
+
+                                                          <img src="{{asset('file/doc/'.$image->image)}}" style="width:100px" alt="">
+                                                        @endforeach
+                                                      </div>
                                                     </div>
-                                                    @endforeach
-                                                  <?php endif; ?>
+                                                  </div>
+
+                                                  @endforeach
                                                 </div>
 
 
@@ -1027,7 +1040,30 @@
                 <i class="fa fa-warning text-warning" style="font-size:72px"></i>
                 <h2>Are you sure?</h2>
                 <h6>You will not be able to recover this imaginary file!</h6>
-                <form class="text-center" action="{{url('delete-dasar/'.$dasar1->id)}}" id="formDelete-{{$dasar1->id}}" method="post">
+                <form class="text-center" action="{{url('delete-dasar/'.$dasar1->id)}}" id="" method="post">
+                  @csrf
+                  <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Cancel</button>
+                  <button type="submit" class="btn btn-danger" name="button">Delete</button>
+                </form>
+              </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+@foreach($project->sosialisasi as $sosis)
+
+<div class="modal fade ondelete-sosis{{$sosis->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+
+            <div class="modal-body pricing_page text-justify pt-4 mb-4">
+              <div class="text-center">
+                <i class="fa fa-warning text-warning" style="font-size:72px"></i>
+                <h2>Are you sure?</h2>
+                <h6>You will not be able to recover this imaginary file!</h6>
+                <form class="text-center" action="{{url('delete-sosialisasi/'.$sosis->id)}}" method="post">
                   @csrf
                   <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Cancel</button>
                   <button type="submit" class="btn btn-danger" name="button">Delete</button>
@@ -1050,7 +1086,7 @@
                 <i class="fa fa-warning text-warning" style="font-size:72px"></i>
                 <h2>Are you sure?</h2>
                 <h6>You will not be able to recover this imaginary file!</h6>
-                <form class="text-center" action="{{url('delete-impact/'.$impact->id)}}" id="formDelete-{{$impact->id}}" method="post">
+                <form class="text-center" action="{{url('delete-impact/'.$impact->id)}}" id="" method="post">
                   @csrf
                   <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Cancel</button>
                   <button type="submit" class="btn btn-danger" name="button">Delete</button>
@@ -1065,7 +1101,7 @@
 @stop
 
 @section('page-styles')
-<link rel="stylesheet" href="{{ asset('assets/vendor/summernote/dist/summernote.css') }}">
+
 <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-datatable/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css') }}">
@@ -1084,11 +1120,29 @@
 <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/nestable/jquery-nestable.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/c3/c3.min.css') }}">
+<link rel="stylesheet" href="{{asset('assets/vendor/summernote/dist/summernote.min.css')}}">
+<style media="screen">
+  .modal-backdrop{
+    z-index: -1;
+    background: none;
+  }
+  .note-link-popover{
+    display: none;
+  }
+  .note-image-popover{
+    display: none;
+  }
+  .top-navbar {
+    /* z-index: -1; */
+  }
+  .modal{
+    top:50px;
+  }
+</style>
 @stop
 
 @section('page-script')
 <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
-<script src="{{ asset('assets/vendor/summernote/dist/summernote.js') }}"></script>
 <script src="{{ asset('assets/bundles/datatablescripts.bundle.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js') }}"></script>
@@ -1108,12 +1162,14 @@
 <script src="{{ asset('assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script><!-- Bootstrap Tags Input Plugin Js -->
 <script src="{{ asset('assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 <script src="{{ asset('assets/vendor/parsleyjs/js/parsley.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/summernote/dist/summernote.js') }}"></script>
 <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{{asset('assets/vendor/selects/select2-bootstrap.css')}}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+<script type="text/javascript" src="{{asset('assets/vendor/summernote/dist/summernote.min.js')}}"></script>
 <script>
+
+
 $(function() {
     // validation needs name of the element
     $('#food').multiselect();
@@ -1128,7 +1184,7 @@ $(document).ready(function() {
   $(".select").select2({
     theme: "bootstrap",
     width:'100%',
-     placeholder: "Pilih Member"
+
    });
 });
 </script>
@@ -1138,7 +1194,7 @@ $(document).ready(function() {
   $(".select").select2({
     theme: "bootstrap",
     width:'100%',
-     placeholder: "Pilih Member"
+
    });
    //
    // $('#check-add').click(function(){
@@ -1155,6 +1211,13 @@ $(document).ready(function() {
 });
 </script>
 <script type="text/javascript">
+$(document).ready(function() {
+        $('.summernote').summernote({
+          height: 300,
+          focus: true
+        });
+
+    });
 function confirmDelete(id) {
     swal({
         title: "Are you sure?",

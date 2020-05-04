@@ -23,7 +23,7 @@ class ProjectController extends Controller
 {
     public function myproject()
     {
-      $project = Project::where('project_owner',Auth::user()->id)->get();
+      $project = Project::select('projects.*','projects.id as pid')->join('members','members.project_id','projects.id')->where('members.user_id',Auth::user()->id)->get();
       $user = User::all();
       $unit = Unit::all();
       $problem = Problem::all();
@@ -31,6 +31,10 @@ class ProjectController extends Controller
     }
     public function problemsubmit(Request $request,$id)
     {
+      $validatedData = $request->validate([
+
+        'background' => 'required',
+    ]);
       $problem = new Problem;
       $problem->user_id =  Auth::user()->id;
       $problem->unit_id = $request->unit_id;
@@ -46,6 +50,10 @@ class ProjectController extends Controller
     }
     public function problemupdate(Request $request,$id)
     {
+      $validatedData = $request->validate([
+
+        'background' => 'required',
+    ]);
       $project = Project::find($id);
       $problem = Problem::where('problem_id',$project->problem->problem_id)->first();
       $problem->problem = $request->problem;
@@ -57,6 +65,12 @@ class ProjectController extends Controller
     {
       $project  = Project::find($id);
       $project->delete();
+      return redirect()->back()->with(['success' => 'Project has been successfully deleted!']);
+    }
+    public function deletesosialisasi(Request $request,$id)
+    {
+      $sosialisasi  = Sosialisasi::find($id);
+      $sosialisasi->delete();
       return redirect()->back()->with(['success' => 'Project has been successfully deleted!']);
     }
     function myprojectstore(Request $request){
@@ -88,6 +102,12 @@ class ProjectController extends Controller
       $problem = Problem::where('user_id',Auth::user()->id)->get();
       $unit = Unit::all();
       return view('project.projectdetail',['project'=>$project,'user'=>$user,'unit'=>$unit,'problem'=>$problem]);
+    }
+    public function deleteMemberProject(Request $request,$id)
+    {
+        $members = Member::find($id);
+        $members->delete();
+        return redirect()->back()->with(['success' => 'Member has been deleted!!!']);
     }
     public function updateproblem(Request $request,$id)
     {
@@ -290,11 +310,15 @@ class ProjectController extends Controller
       // code...
 
       $flight = Project::find($id);
+      $problem = Problem::where('problem_id',$flight->problem_id)->first();
+
       if ($request->status === 'On Development') {
         if ($flight->summary !== null) {
           $flight->project_status = $request->status;
+          $problem->status = $request->status.' - '.$flight->project_name;
 
           $flight->save();
+          $problem->save();
           return redirect()->back()->with(['success' => 'Data has been successfully Updated!']);
         }else {
           return redirect()->back()->with(['error' => 'Data has been failed Updated!']);
@@ -304,8 +328,21 @@ class ProjectController extends Controller
         // code...
         if ($flight->pilotproject !== null) {
           $flight->project_status = $request->status;
+          $problem->status = $request->status.' - '.$flight->project_name;
 
           $flight->save();
+          $problem->save();
+          return redirect()->back()->with(['success' => 'Data has been successfully Updated!']);
+        }else {
+          return redirect()->back()->with(['error' => 'Data has been failed Updated!']);
+        }
+      }elseif ($request->status === 'Idea Generation') {
+        if ($flight->problem !== null) {
+          $flight->project_status = $request->status;
+          $problem->status = $request->status.' - '.$flight->project_name;
+
+          $flight->save();
+          $problem->save();
           return redirect()->back()->with(['success' => 'Data has been successfully Updated!']);
         }else {
           return redirect()->back()->with(['error' => 'Data has been failed Updated!']);
@@ -360,17 +397,12 @@ class ProjectController extends Controller
     {
       $paingain = Sosialisasi::where('project_id',$id)->first();
       $project = Project::find($id);
-      if ($project->pilotproject !== null) {
-        if (!isset($paingain)) {
+      if (count($project->dasarimplementasi) !== 0) {
+
           $sosis = DB::table('sosialisasi')->insertGetId(
-              ['judul'=>$request->judul,'lokasi'=>$request->lokasi,'post'=>$request->post, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
+              ['judul'=>$request->judul,'tanggal_event'=>$request->tanggal,'user_id'=>Auth::user()->id,'lokasi'=>$request->lokasi,'post'=>$request->post, 'project_id'=>$id,'created_at'=>date('Y-m-d H:i:s'),'updated_at'=>date('Y-m-d H:i:s')]
           );
-        }else{
-          $sosis = $paingain->id;
-          DB::table('sosialisasi')->where('project_id',$id)->update(
-              ['judul'=>$request->judul,'lokasi'=>$request->lokasi,'post'=>$request->post,'updated_at'=>date('Y-m-d H:i:s')]
-          );
-        }
+
         if($request->image != null) {
           for ($i=0; $i <count($request->image) ; $i++) {
             // $filename = 'mockup-'.time() . '.' . $request->mockup_file->getClientOriginalExtension();
